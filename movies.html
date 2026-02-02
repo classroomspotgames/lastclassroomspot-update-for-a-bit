@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClassroomSpot TV</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #141414;
+    color: white;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23e50914'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E") 12 12, auto;
+}
+a, button, .card, input, .clear-search {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23ff0000'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E") 12 12, pointer;
+}
+header {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.9) 10%, transparent);
+    padding: 20px 4%;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: background 0.4s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+header.scrolled {
+    background: #141414;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.header-left { flex: 1; }
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #e50914;
+    font-weight: bold;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+}
+header p {
+    color: #e5e5e5;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.search-icon {
+    position: absolute;
+    left: 12px;
+    color: #fff;
+    font-size: 1.2rem;
+    pointer-events: none;
+    transition: color 0.3s;
+}
+#searchBar {
+    background: rgba(0,0,0,0.75);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 10px 15px 10px 40px;
+    border-radius: 4px;
+    width: 250px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    outline: none;
+}
+#searchBar:focus {
+    background: rgba(0,0,0,0.9);
+    border-color: #e50914;
+    width: 300px;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.3);
+}
+#searchBar::placeholder { color: #888; }
+.clear-search {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    display: none;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+}
+.clear-search.visible { display: flex; }
+main {
+    padding-top: 120px;
+    padding-bottom: 50px;
+}
+section {
+    margin-bottom: 40px;
+    padding: 0 4%;
+    transition: opacity 0.3s;
+}
+section.hidden { display: none; }
+h2 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #e5e5e5;
+    font-weight: 500;
+    line-height: 1.3;
+}
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+    font-size: 1.2rem;
+    display: none;
+}
+.no-results.visible { display: block; }
+.row {
+    display: flex;
+    gap: 8px;
+    overflow-x: scroll;
+    overflow-y: visible;
+    padding: 20px 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    position: relative;
+}
+.row::-webkit-scrollbar { display: none; }
+.card {
+    position: relative;
+    flex: 0 0 auto;
+    width: 16%;
+    min-width: 200px;
+    aspect-ratio: 2/3;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: #222;
+    text-decoration: none;
+    display: block;
+    border: 3px solid transparent;
+    outline: none;
+}
+.card.hidden { display: none; }
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+}
+.card.focused {
+    border-color: #e50914;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+    z-index: 50;
+}
+.card:hover {
+    transform: scale(1.4);
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    border-radius: 6px;
+    border-color: transparent;
+}
+.card:hover ~ .card { transform: translateX(20px); }
+.row:has(.card:hover) .card:not(:hover) { opacity: 0.3; }
+.card::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px 10px 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-align: center;
+    pointer-events: none;
+}
+.card:hover::after, .card.focused::after { opacity: 1; }
+.keyboard-hint {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.9);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    font-size: 0.85rem;
+    color: #aaa;
+    z-index: 999;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+.keyboard-hint kbd {
+    background: #333;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: white;
+    font-family: monospace;
+    border: 1px solid #555;
+    display: inline-block;
+    margin: 2px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+.modal-content {
+    background: #181818;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid #333;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
+.modal-content h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: white;
+}
+.modal-content button {
+    width: 100%;
+    margin: 8px 0;
+    padding: 15px;
+    border-radius: 4px;
+    border: none;
+    background: #e50914;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    outline: none;
+}
+.modal-content button:focus {
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.5);
+    background: #f40612;
+}
+.modal-content button:hover { background: #f40612; }
+.modal-content .close {
+    background: #333;
+    margin-top: 10px;
+}
+.modal-content .close:hover { background: #444; }
+@media (max-width: 1200px) {
+    .card { width: 20%; }
+    #searchBar { width: 200px; }
+    #searchBar:focus { width: 250px; }
+}
+@media (max-width: 768px) {
+    .card { width: 33.333%; min-width: 120px; }
+    header h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.2rem; }
+    .keyboard-hint { display: none; }
+    header { flex-direction: column; align-items: flex-start; }
+    #searchBar { width: 100%; margin-top: 10px; }
+    main { padding-top: 160px; }
+}
+.card img {
+    background: linear-gradient(90deg, #1a1a1a 25%, #333 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.card img[src] { animation: none; }
+</style>
+</head>
+
+<body>
+
+<button onclick="parent.closeWindow()" style="position:fixed;top:10px;right:10px;z-index:9999;background:#e50914;color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;">✕</button>
+
+<header id="mainHeader">
+    <div class="header-left">
+        <h1>CLASSROOMSPOT TV</h1>
+        <p>Shows & Movies Collection</p>
+    </div>
+
+    <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchBar" placeholder="Titles, people, genres" autocomplete="off">
+        <button class="clear-search" id="clearSearch">×</button>
+    </div>
+</header>
+
+<main>
+
+<div class="no-results" id="noResults">
+    <h3>No results found</h3>
+    <p>Try adjusting your search to find what you're looking for.</p>
+</div>
+
+<!-- TV SHOWS -->
+<section data-row-index="0" data-category="tv">
+    <h2>TV Shows</h2>
+    <div class="row">
+
+        <a class="card" href="https://docs.google.com/forms/d/e/1FAIpQLSeq5t-QMtTuPZc_0okL8IZatJ9cXinb5Rztd7Q4tD82WFCf_g/viewform?usp=publish-editor" target="_blank" data-title="Request a Movie or Show" style="background-image: url('https://www.bing.com/th/id/OSK.dbd9b25e6bacdce756dc7e5d52daa699?w=224&h=200&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-decoration: none; position: relative;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6);"></div>
+            <div style="position: relative; text-align: center; color: white; font-weight: bold; font-size: 1rem; padding: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); z-index: 1;">
+                Request a Movie or Show<br>
+                <span style="font-size: 1.5rem; display: block; margin-top: 5px;">📽️</span>
+            </div>
+        </a>
+
+        <a class="card" href="https://drive.google.com/drive/folders/1PzKaoaK4blzlaoxnwC20gZoeYE5mDxWL?usp=sharing" target="_blank" data-title="South Park">
+            <img src="https://tse3.mm.bing.net/th/id/OIP.UXOt0HcxzNleoTAwG7SNfgHaFj?w=760&h=570&rs=1&pid=ImgDetMain&o=7&rm=3" alt="South Park">
+        </a>
+
+        <a class="card" href="https://drive.google.com/drive/folders/1ZtFBjPAE-qVzdHJ3EKnvlBFNhux5m3Hi?usp=sharing" target="_blank" data-title="The Simpsons">
+            <img src="https://wallpapercat.com/w/full/4/8/c/133152-1080x1920-iphone-full-hd-the-simpsons-background-photo.jpg" alt="The Simpsons">
+        </a>
+
+        <button class="card" onclick="openHazbin()" data-title="Hazbin Hotel" style="border: none; background: none; padding: 0;">
+            <img src="https://tse3.mm.bing.net/th/id/OIP.5S-z4RZt_WsNMc6fvX_yAAHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Hazbin Hotel">
+        </button>
+
+        <a class="card" href="https://sites.google.com/view/4th-grade-classroom41?pli=1&authuser=1" target="_blank" data-title="Extra Movies" style="background: linear-gradient(135deg, #e50914 0%, #b20710 100%); display: flex; align-items: center; justify-content: center; text-decoration: none;">
+            <div style="text-align: center; color: white; font-weight: bold; font-size: 1.1rem; padding: 20px;">
+                Extra<br>Movies<br>
+                <span style="font-size: 2rem; display: block; margin-top: 10px;">🎬</span>
+            </div>
+        </a>
+
+    </div>
+</section>
+
+<!-- MOVIES -->
+<section data-row-index="1" data-category="movies">
+    <h2>Movies</h2>
+    <div class="row">
+        <a class="card" href="https://drive.google.com/file/d/1rKRsgdNioFs3rtkZai7Gz97FtAX0jdJ_/view" target="_blank" data-title="Diary of a Wimpy Kid">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.RjS_TGBUhApypAn5BHlC8wHaKk?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Diary of a Wimpy Kid">
+        </a>
+
+        <a class="card" href="https://drive.google.com/file/d/1aXHiOSQjs7rCj933p22WnVSHOsVnv7IB/view" target="_blank" data-title="Dog Man">
+            <img src="https://www.bing.com/th/id/OIP.W3ZClloEmIDNcYf0c4exPwHaJ4?w=193&h=257&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Dog Man">
+        </a>
+
+        <a class="card" href="https://sites.google.com/view/8tsr/movies-holder/fnaf-movie" target="_blank" data-title="Five Nights at Freddy's">
+            <img src="https://www.bing.com/th/id/OIP.GC1YqXIPKdLXMe-OVtRfOAHaLu?w=193&h=306&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Five Nights at Freddy's">
+        </a>
+    </div>
+</section>
+
+</main>
+
+<!-- Keyboard Instructions -->
+<div class="keyboard-hint">
+    <strong>Controls:</strong><br>
+    <kbd>A</kbd> Left <kbd>D</kbd> Right<br>
+    <kbd>W</kbd> Up <kbd>S</kbd> Down<br>
+    <kbd>Enter</kbd> Select<br>
+    <kbd>/</kbd> Search
+</div>
+
+<!-- HAZBIN MODAL -->
+<div id="hazbinModal" class="modal">
+    <div class="modal-content">
+        <h3>Hazbin Hotel</h3>
+        <button onclick="window.open('https://drive.google.com','_blank')" id="season1Btn">Season 1</button>
+        <button onclick="window.open('https://drive.google.com','_blank')" id="season2Btn">Season 2</button>
+        <button class="close" onclick="closeHazbin()" id="closeModalBtn">Close</button>
+    </div>
+</div>
+
+<script>
+let currentRow = 0;
+let currentCol = 0;
+let isModalOpen = false;
+let isSearchFocused = false;
+const rows = document.querySelectorAll('section');
+let currentCard = null;
+let visibleCards = [];
+let visibleRows = [];
+
+const searchBar = document.getElementById('searchBar');
+const clearSearchBtn = document.getElementById('clearSearch');
+const noResults = document.getElementById('noResults');
+
+function updateVisibleItems() {
+    visibleRows = [];
+    visibleCards = [];
+
+    rows.forEach((row, rowIndex) => {
+        const cards = row.querySelectorAll('.card');
+        const visibleInRow = [];
+
+        cards.forEach((card, colIndex) => {
+            if (!card.classList.contains('hidden')) {
+                visibleInRow.push({ card, rowIndex, colIndex: visibleInRow.length });
+            }
+        });
+
+        if (visibleInRow.length > 0) {
+            visibleRows.push(row);
+            visibleCards.push(visibleInRow);
+        } else {
+            row.classList.add('hidden');
+        }
+    });
+
+    if (visibleRows.length === 0 && searchBar.value.trim() !== '') {
+        noResults.classList.add('visible');
+    } else {
+        noResults.classList.remove('visible');
+    }
+
+    if (currentRow >= visibleRows.length) {
+        currentRow = visibleRows.length > 0 ? 0 : 0;
+        currentCol = 0;
+    }
+    if (visibleCards[currentRow] && currentCol >= visibleCards[currentRow].length) {
+        currentCol = visibleCards[currentRow].length > 0 ? visibleCards[currentRow].length - 1 : 0;
+    }
+
+    updateFocus();
+}
+
+function filterCards(query) {
+    const lowerQuery = query.toLowerCase().trim();
+
+    if (lowerQuery === '') {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('hidden'));
+        document.querySelectorAll('section').forEach(s => s.classList.remove('hidden'));
+        clearSearchBtn.classList.remove('visible');
+    } else {
+        clearSearchBtn.classList.add('visible');
+        document.querySelectorAll('.card').forEach(card => {
+            const title = card.getAttribute('data-title').toLowerCase();
+            const category = card.closest('section').getAttribute('data-category').toLowerCase();
+
+            if (title.includes(lowerQuery) || category.includes(lowerQuery)) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.remove('focused');
+                card.classList.add('hidden');
+            }
+        });
+    }
+
+    updateVisibleItems();
+}
+
+searchBar.addEventListener('input', (e) => {
+    filterCards(e.target.value);
+});
+
+searchBar.addEventListener('focus', () => {
+    isSearchFocused = true;
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('focused'));
+});
+
+searchBar.addEventListener('blur', () => {
+    isSearchFocused = false;
+    updateFocus();
+});
+
+clearSearchBtn.addEventListener('click', () => {
+    searchBar.value = '';
+    filterCards('');
+    searchBar.blur();
+});
+
+function init() {
+    updateVisibleItems();
+    document.querySelectorAll('.card').forEach((card) => {
+        card.addEventListener('click', function(e) {
+            if (this.onclick && this.onclick.toString().includes('openHazbin')) {
+            } else if (!isModalOpen && !isSearchFocused) {
+                const section = this.closest('section');
+                const rowIndex = parseInt(section.dataset.rowIndex);
+                let found = false;
+                for (let r = 0; r < visibleCards.length; r++) {
+                    for (let c = 0; c < visibleCards[r].length; c++) {
+                        if (visibleCards[r][c].card === this) {
+                            currentRow = r;
+                            currentCol = c;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) break;
+                }
+                updateFocus();
+            }
+        });
+    });
+}
+
+function updateFocus() {
+    if (isSearchFocused || visibleRows.length === 0) return;
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('focused'));
+    if (currentRow >= visibleRows.length) currentRow = visibleRows.length - 1;
+    if (currentRow < 0) currentRow = 0;
+
+    if (visibleCards[currentRow]) {
+        if (currentCol >= visibleCards[currentRow].length) {
+            currentCol = visibleCards[currentRow].length - 1;
+        }
+        if (currentCol < 0) currentCol = 0;
+
+        const target = visibleCards[currentRow][currentCol];
+        if (target) {
+            currentCard = target.card;
+            currentCard.classList.add('focused');
+            currentCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !isModalOpen && !isSearchFocused) {
+        e.preventDefault();
+        searchBar.focus();
+        return;
+    }
+
+    if (e.key === 'Escape' && isSearchFocused) {
+        searchBar.blur();
+        return;
+    }
+
+    if (isSearchFocused) {
+        if (e.key === 'Enter') {
+            searchBar.blur();
+        }
+        return;
+    }
+
+    if (isModalOpen) {
+        handleModalKeys(e);
+        return;
+    }
+
+    if (visibleCards.length === 0) return;
+
+    switch(e.key.toLowerCase()) {
+        case 'a':
+            e.preventDefault();
+            if (currentCol > 0) {
+                currentCol--;
+                updateFocus();
+            }
+            break;
+        case 'd':
+            e.preventDefault();
+            if (currentCol < visibleCards[currentRow].length - 1) {
+                currentCol++;
+                updateFocus();
+            }
+            break;
+        case 's':
+            e.preventDefault();
+            if (currentRow < visibleRows.length - 1) {
+                currentRow++;
+                if (currentCol >= visibleCards[currentRow].length) {
+                    currentCol = visibleCards[currentRow].length - 1;
+                }
+                updateFocus();
+            }
+            break;
+        case 'w':
+            e.preventDefault();
+            if (currentRow > 0) {
+                currentRow--;
+                if (currentCol >= visibleCards[currentRow].length) {
+                    currentCol = visibleCards[currentRow].length - 1;
+                }
+                updateFocus();
+            }
+            break;
+        case 'enter':
+        case 'return':
+            e.preventDefault();
+            if (currentCard) {
+                if (currentCard.onclick && currentCard.onclick.toString().includes('openHazbin')) {
+                    openHazbin();
+                } else if (currentCard.href) {
+                    window.open(currentCard.href, '_blank');
+                }
+            }
+            break;
+    }
+});
+
+function openHazbin() {
+    document.getElementById("hazbinModal").style.display = "flex";
+    isModalOpen = true;
+    setTimeout(() => document.getElementById('season1Btn').focus(), 100);
+}
+
+function closeHazbin() {
+    document.getElementById("hazbinModal").style.display = "none";
+    isModalOpen = false;
+    updateFocus();
+}
+
+function handleModalKeys(e) {
+    const buttons = document.querySelectorAll('.modal-content button');
+    const currentBtn = document.activeElement;
+    const currentIndex = Array.from(buttons).indexOf(currentBtn);
+
+    switch(e.key.toLowerCase()) {
+        case 's':
+            e.preventDefault();
+            if (currentIndex < buttons.length - 1) {
+                buttons[currentIndex + 1].focus();
+            }
+            break;
+        case 'w':
+            e.preventDefault();
+            if (currentIndex > 0) {
+                buttons[currentIndex - 1].focus();
+            }
+            break;
+        case 'escape':
+            closeHazbin();
+            break;
+    }
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById("hazbinModal");
+    if (event.target == modal) {
+        closeHazbin();
+    }
+}
+
+window.addEventListener('scroll', () => {
+    const header = document.getElementById('mainHeader');
+    if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+});
+
+init();
+</script>
+
+</body>
+</html>

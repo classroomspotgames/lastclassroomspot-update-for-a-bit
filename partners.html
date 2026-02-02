@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Partners</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{margin:0;font-family:Arial,sans-serif;background:#0b0b0b;color:white}
+    h1{padding:20px;text-align:center}
+    .games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:20px;max-width:900px;margin:auto}
+    .game-card{background:#555;height:120px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:background .15s,transform .1s}
+    .game-card:hover{background:#666;transform:scale(1.03)}
+    .game-card:active{transform:scale(.97)}
+    .game-name{font-size:18px;font-weight:bold;text-align:center;user-select:none}
+  </style>
+</head>
+<body>
+<button onclick="parent.closeWindow()" style="position:fixed;top:10px;right:10px;z-index:9999;background:#e50914;color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;">✕</button>
+<h1>Partners</h1>
+<div class="games-grid">
+<div class="game-card" onclick="window.open('https://question.sharestaging.com/','_blank')"><div class="game-name">Horizon</div></div>
+<div class="game-card" onclick="window.open('https://mathfunn.vercel.app','_blank')"><div class="game-name">NikeHub</div></div>
+<div class="game-card" onclick="window.open('https://sites.google.com/view/blockmelmao','_blank')"><div class="game-name">Unknown Hub</div></div>
+<div class="game-card" onclick="window.open('https://sites.google.com/view/squidly','_blank')"><div class="game-name">Squidly</div></div>
+<div class="game-card" onclick="window.open('https://sites.google.com/view/jacksildeshow/home?authuser=2','_blank')"><div class="game-name">Aiden Arcade</div></div>
+<div class="game-card" onclick="window.open('https://sites.google.com/view/4th-grade-classroom41?pli=1&authuser=1','_blank')"><div class="game-name">GN Movies</div></div>
+</div>
+</body>
+</html>
