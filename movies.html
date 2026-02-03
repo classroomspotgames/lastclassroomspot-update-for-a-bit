@@ -1,15 +1,60 @@
-<div class="preview-buttons">
-    <!-- Somestuff opens SAME TAB -->
-    <button onclick="location.href='https://wmath.vercel.app/#streaming'">
-        Somestuff Somestuff
-    </button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ClassroomSpot</title>
 
-    <!-- ClassroomSpot TV opens NEW TAB -->
-    <button onclick="window.open(
-        'https://sites.google.com/view/iloveschoolpart6/classroomspot-tv?authuser=1&read_current=1',
-        '_blank'
-    )">
-        ClassroomSpot TV
-    </button>
+<style>
+/* buttons container */
+.preview-buttons {
+  display: flex;
+  gap: 14px;
+  margin: 40px;
+}
+
+/* button base */
+.preview-buttons button {
+  background: #e50914;
+  color: white;
+  border: none;
+  padding: 14px 22px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+/* hover effect */
+.preview-buttons button:hover {
+  background: #ff1a1a;
+  transform: scale(1.08);
+  box-shadow: 0 8px 20px rgba(229,9,20,0.6);
+}
+
+/* click effect */
+.preview-buttons button:active {
+  transform: scale(0.95);
+}
+</style>
+</head>
+
+<body>
+
+<div class="preview-buttons">
+  <!-- SAME TAB -->
+  <button onclick="location.href='https://wmath.vercel.app/#streaming'">
+    Somestuff Somestuff
+  </button>
+
+  <!-- NEW TAB -->
+  <button onclick="window.open(
+    'https://sites.google.com/view/iloveschoolpart6/classroomspot-tv?authuser=1&read_current=1',
+    '_blank'
+  )">
+    ClassroomSpot TV
+  </button>
 </div>
 
+</body>
+</html>
