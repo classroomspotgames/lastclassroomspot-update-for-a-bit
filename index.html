@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6,11 +6,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="launcher.css">
+
+<style>
+/* VOTE POPUP */
+#votePopup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#voteBox {
+  background: #111;
+  color: white;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+#voteBox h2 {
+  margin-top: 0;
+}
+
+#voteBox button {
+  margin: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#voteBtn {
+  background: #e50914;
+  color: white;
+}
+
+#closeVote {
+  background: #444;
+  color: white;
+}
+</style>
 </head>
+
 <body>
 
-<a href="classroomspot-ai.html" style="display:inline-block;margin:10px;padding:12px 16px;background:#e50914;color:#fff;border-radius:8px;text-decoration:none;">ClassroomSpot AI</a>
+<!-- VOTE NOTE -->
+<div id="votePopup">
+  <div id="voteBox">
+    <h2>❤️ Support Us</h2>
+    <p>Do you love our site?<br>Please support us by voting on our site!</p>
+    <button id="voteBtn" onclick="window.open('https://ubghub.org/?site=classroomspot','_blank')">
+      Vote
+    </button>
+    <button id="closeVote" onclick="closeVote()">Exit</button>
+  </div>
+</div>
 
+<a href="classroomspot-ai.html" style="display:inline-block;margin:10px;padding:12px 16px;background:#e50914;color:#fff;border-radius:8px;text-decoration:none;">
+  ClassroomSpot AI
+</a>
 
 <div class="dock">
   <button onclick="openWindow('games.html','Games')">Games</button>
@@ -18,10 +78,10 @@
   <button onclick="openWindow('partners.html','Partners')">Partners</button>
   <button onclick="openWindow('unblockers.html','Unblocker')">Unblocker</button>
   <button onclick="openWindow('classroomspot-ai.html','AI Math')" style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:white;cursor:pointer;font-size:14px;">
-  <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png" style="width:20px;height:20px;border-radius:50%;">
-  AI Math
-</button>
-<button onclick="openSettings()">⚙</button>
+    <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png" style="width:20px;height:20px;border-radius:50%;">
+    AI Math
+  </button>
+  <button onclick="openSettings()">⚙</button>
 </div>
 
 <div id="window" class="window hidden">
@@ -45,6 +105,12 @@
   <br><br>
   <button onclick="closeSettings()">Close</button>
 </div>
+
+<script>
+function closeVote() {
+  document.getElementById('votePopup').style.display = 'none';
+}
+</script>
 
 <script src="launcher.js"></script>
 </body>
