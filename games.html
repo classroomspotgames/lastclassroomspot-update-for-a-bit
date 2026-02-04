@@ -91,7 +91,10 @@ function addGTAViceCity(){
  label.className="game-name";
  label.textContent="GTA Vice City";
  card.appendChild(label);
- card.onclick=()=>parent.openWindow("https://t9os.vercel.app/gtavc.html","GTA Vice City");
+
+ // ✅ UPDATED: GTA Vice City now loads YOUR new HTML
+ card.onclick=()=>parent.openWindow("gtavc-loader.html","GTA Vice City");
+
  gamesEl.appendChild(card);
 }
 
@@ -134,5 +137,4 @@ function openGame(g){
 </script>
 
 </body>
-
 </html>
