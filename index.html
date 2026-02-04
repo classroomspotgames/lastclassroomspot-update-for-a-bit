@@ -51,6 +51,137 @@
   background: #444;
   color: white;
 }
+
+/* Button styling for dock */
+.dock button {
+  margin: 4px;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.dock button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+
+/* Additional wallpaper button styling */
+#settings button {
+  margin: 4px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+#settings button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-1px);
+}
+
+#settings h3 {
+  color: white;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+/* Hidden window styling */
+.window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: #111;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.window.hidden {
+  display: none;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #222;
+  border-bottom: 1px solid #333;
+}
+
+.topbar span {
+  color: white;
+  font-weight: bold;
+}
+
+.topbar button {
+  background: #e50914;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.topbar button:hover {
+  background: #ff1a25;
+}
+
+#frame {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: white;
+}
+
+/* Settings panel */
+.settings {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  z-index: 1001;
+  max-width: 400px;
+  width: 90%;
+}
+
+.settings.hidden {
+  display: none;
+}
+
+/* AI Math button specific styling */
+.ai-math-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.1) !important;
+}
+
+.ai-math-btn img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
 </style>
 </head>
 
@@ -77,8 +208,8 @@
   <button onclick="openWindow('movies.html','Movies')">Movies</button>
   <button onclick="openWindow('partners.html','Partners')">Partners</button>
   <button onclick="openWindow('unblockers.html','Unblocker')">Unblocker</button>
-  <button onclick="openWindow('classroomspot-ai.html','AI Math')" style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:white;cursor:pointer;font-size:14px;">
-    <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png " style="width:20px;height:20px;border-radius:50%;">
+  <button onclick="openWindow('classroomspot-ai.html','AI Math')" class="ai-math-btn">
+    <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png">
     AI Math
   </button>
   <button onclick="openSettings()">⚙</button>
@@ -97,21 +228,139 @@
   <button onclick="setWallpaper('goku')">Goku</button>
   <button onclick="setWallpaper('naruto')">Naruto</button>
   <button onclick="setWallpaper('surfer')">Silver Surfer</button>
+  <button onclick="setWallpaper('naruto-gif')">Naruto GIF</button>
+  <button onclick="setWallpaper('onepiece')">One Piece</button>
+  <button onclick="setWallpaper('jjk')">JJK</button>
+  <button onclick="setWallpaper('roblox')">Roblox</button>
+  <button onclick="setWallpaper('fortnite')">Fortnite</button>
+  <button onclick="setWallpaper('dbz')">Dragon Ball Z</button>
+  <button onclick="setWallpaper('tungtung')">Tung Tung Sahur</button>
 
   <h3>Cloak</h3>
-  <button onclick="setBlank()">about:blank</button>
+  <button onclick="openAboutBlank()">Open about:blank</button>
   <input id="cloakInput" placeholder="Tab name">
-  <button onclick="setCloak()">Apply</button>
+  <button onclick="setCloak()">Apply Cloak</button>
   <br><br>
   <button onclick="closeSettings()">Close</button>
 </div>
 
 <script>
+const wallpapers = {
+  'goku': 'goku.jpg',
+  'naruto': 'naruto.jpg',
+  'surfer': 'silver_surfer.jpg',
+  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0',
+  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg',
+  'jjk': 'https://wallpapercave.com/wp/wp9745449.png',
+  'roblox': 'https://wallpaperaccess.com/full/196936.jpg',
+  'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg',
+  'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg',
+  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3'
+};
+
+// Open window with content
+function openWindow(url, title) {
+  const win = document.getElementById('window');
+  const frame = document.getElementById('frame');
+  const titleSpan = document.getElementById('windowTitle');
+  
+  frame.src = url;
+  titleSpan.textContent = title;
+  win.classList.remove('hidden');
+}
+
+// Close the window
+function closeWindow() {
+  const win = document.getElementById('window');
+  const frame = document.getElementById('frame');
+  
+  frame.src = '';
+  win.classList.add('hidden');
+}
+
+// Settings functions
+function openSettings() {
+  document.getElementById('settings').classList.remove('hidden');
+}
+
+function closeSettings() {
+  document.getElementById('settings').classList.add('hidden');
+}
+
+// Set wallpaper
+function setWallpaper(name) {
+  const url = wallpapers[name];
+  if (url) {
+    document.body.style.backgroundImage = `url('${url}')`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundAttachment = 'fixed';
+  }
+}
+
+// Open about:blank cloaker - opens new tab with hidden content
+function openAboutBlank() {
+  const win = window.open('about:blank', '_blank');
+  if (win) {
+    win.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>about:blank</title>
+        <style>
+          body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+          }
+          #cloak-frame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+          }
+          .hidden { display: none; }
+        </style>
+      </head>
+      <body>
+        <iframe id="cloak-frame" src="${window.location.href}"></iframe>
+        <script>
+          // Prevent URL from showing by keeping focus
+          setInterval(function() {
+            window.history.replaceState({}, 'about:blank', 'about:blank');
+          }, 100);
+        <\/script>
+      </body>
+      </html>
+    `);
+    win.document.close();
+  }
+}
+
+// Apply cloak to current tab
+function setCloak() {
+  const name = document.getElementById('cloakInput').value || 'about:blank';
+  document.title = name;
+  
+  // Change favicon to blank
+  const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+  link.type = 'image/x-icon';
+  link.rel = 'shortcut icon';
+  link.href = 'data:image/x-icon;base64,';
+  document.getElementsByTagName('head')[0].appendChild(link);
+  
+  // Push history state to hide URL
+  history.pushState({}, name, 'about:blank');
+}
+
 function closeVote() {
   document.getElementById('votePopup').style.display = 'none';
 }
 </script>
 
-<script src="launcher.js"></script>
 </body>
 </html>
