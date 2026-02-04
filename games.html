@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClassroomSpot</title>
-<link rel="stylesheet" href="style.css">
-
 <style>
 body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
+.nav{padding:20px;background:#111;display:flex;align-items:center}
+.logo{font-size:24px;font-weight:bold;color:#e50914}
+.topbar{padding:15px 30px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222}
+#search{padding:8px 15px;border-radius:20px;border:none;background:#222;color:white;width:200px}
 .games-grid{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
@@ -36,12 +38,165 @@ body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
  padding:6px 0;
  border-radius:0 0 50% 50%;
 }
-</style>
+.close-btn{position:fixed;top:10px;right:10px;z-index:9999;background:#e50914;color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;}
 
+/* GTA Vice City Modal Styles */
+#gta-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    z-index: 10000;
+    overflow: hidden;
+}
+#gta-modal.active {
+    display: block;
+}
+#gta-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e50914;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* GTA Loading Screen Styles */
+.gta-loader {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    font-family: 'Courier New', monospace;
+    background: #1a1a1a;
+}
+#gta-vanta-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.gta-loading-content {
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    z-index: 2;
+    position: relative;
+    margin: 0 auto;
+    padding-top: 25vh;
+}
+.gta-game-title {
+    color: #e69500;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.gta-game-subtitle {
+    color: #e6950070;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+.gta-status {
+    color: #c27c15;
+    font-size: 1rem;
+    margin-bottom: 30px;
+    font-weight: 500;
+    height: 20px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.gta-loading-bar-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin: 30px 0 20px;
+    overflow: hidden;
+    position: relative;
+}
+.gta-loading-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #c27c1580, #c27c1580, transparent);
+    animation: gta-slide 1.5s infinite ease-in-out;
+}
+@keyframes gta-slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+}
+.gta-percentage {
+    color: #e69500;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.gta-quote-container {
+    margin: 40px 0 0;
+    padding: 20px 0 0;
+    position: relative;
+}
+.gta-quote-container:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c27c1530, transparent);
+}
+.gta-quote-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    font-style: italic;
+    font-weight: 300;
+    padding: 0 10px;
+}
+.gta-success {
+    color: #4CAF50;
+    animation: gta-pulse-success 2s infinite;
+}
+@keyframes gta-pulse-success {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+#gta-game-frame {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+</style>
 </head>
 <body>
 
-<button onclick="parent.closeWindow()" style="position:fixed;top:10px;right:10px;z-index:9999;background:#e50914;color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;">✕</button>
+<button onclick="closeWindow()" class="close-btn">✕</button>
 
 <nav class="nav">
   <span class="logo">ClassroomSpot</span>
@@ -54,85 +209,284 @@ body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
 
 <div id="games" class="games-grid"></div>
 
+<!-- GTA Vice City Modal -->
+<div id="gta-modal">
+    <button id="gta-close" onclick="closeGTAModal()">✕</button>
+    
+    <div class="gta-loader" id="gta-loader-screen">
+        <div id="gta-vanta-bg"></div>
+        
+        <div class="gta-loading-content" id="gta-loader-content">
+            <div class="gta-game-title">LOADING</div>
+            <div class="gta-game-subtitle">GRAND THEFT AUTO VICE CITY</div>
+            
+            <div class="gta-status" id="gta-status-text">Initializing game engine...</div>
+            
+            <div class="gta-loading-bar-container">
+                <div class="gta-loading-bar"></div>
+            </div>
+            
+            <div class="gta-percentage" id="gta-percentage">0%</div>
+            
+            <div class="gta-quote-container">
+                <div class="gta-quote-text" id="gta-quote-text">Access Denied - You are Gay</div>
+            </div>
+        </div>
+        
+        <iframe id="gta-game-frame" sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-fullscreen"></iframe>
+    </div>
+</div>
+
+<!-- Three.js and Vanta.js for GTA background -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+
 <script>
 const gamesEl = document.getElementById("games");
 const search = document.getElementById("search");
 const totalEl = document.getElementById("total");
+const gtaModal = document.getElementById("gta-modal");
 
 const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json";
-const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
-const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main";
+const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/";
+const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
 
 let games = [];
 const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
 const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3";
 
+// Safe window handling
+const isInIframe = window !== window.parent;
+const safeOpenWindow = (url, title) => {
+    if (isInIframe && typeof parent.openWindow === 'function') {
+        parent.openWindow(url, title);
+    } else {
+        window.open(url, '_blank');
+    }
+};
+
+const closeWindow = () => {
+    if (isInIframe && typeof parent.closeWindow === 'function') {
+        parent.closeWindow();
+    } else {
+        window.close();
+    }
+};
+
+// GTA Vice City Configuration
+const GTA_CONFIG = {
+    quotes: ["Cmon we all know that Marval Rivals is overrated","Everyone knows ur a furry buddy","For the love of god stay out of the comments","Are you enjoying the site? You better be or else...","Join my discord I have funny things on there","Tell me your favorite game in the comments","Call 911!! Whats the Number?","Access Denied - You are Gay","HELPPPPPPP HELPPPP MEEE","Linganguliguliwatalingagoolingangoo","Make sure the one homie that doesnt hop on knows who hate him","Make sure you do your homework buddy im watching you","Does your mom know you're gay?","If you can read this you're too close","I see you looking at my code","This game is way better than Fortnite","This game is way worse than Fortnite","I like turtles","Why are you still reading these?","Press F to thank the bus driver","I said wait mf....","Fun fact: your chopped","Yoooo whats up","Stop @ing me on discord bruh","Isnt this loading screen cool?","This site was made with love <3","FAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH","These edibles ain't shit","Game will load after this 3 second ad","Are we there yet","You know I have to type of of these","I wish my dad came back with the milk","Uhhh my mom said I have to do my homework first","Hey siri whats the name of this site","Should've used adblock","That's what she said","Who made this piece of shit","It's not a bug it's a feature","The numbers Mason, what do they mean","Mila wheela the greatest!!","Bacon Bacon Bacon","My name is anderdingus","Goo goo ga ga","Why is this taking so long?","Mane fawk you mama huevo","Ill give you 5$ to say the n-word","Meow","Take your pants off in 3... 2... 1...","Is it okay if I touch you....?"],
+    loadingSteps: [
+        {"status":"Stealing Lesson....","progress":15,"time":800},
+        {"status":"Aquiring HTML assets..","progress":30,"time":700},
+        {"status":"Putting in the thingamabobs...","progress":45,"time":900},
+        {"status":"Screwing in the doohickeys..","progress":60,"time":1200},
+        {"status":"Establishing tarbonator...","progress":75,"time":600},
+        {"status":"Contacting Netanyahu....","progress":85,"time":800},
+        {"status":"Finalizing...","progress":95,"time":1000},
+        {"status":"Ready to launch...","progress":100,"time":1200}
+    ],
+    vantaSettings: {
+        el: "#gta-vanta-bg",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        highlightColor: 15111424,
+        midtoneColor: 12745749,
+        lowlightColor: 15111424,
+        baseColor: 1710618,
+        speed: 2.50,
+        zoom: 1.80
+    },
+    gameURL: "https://example-gta-game.com" // REPLACE WITH ACTUAL GTA GAME URL
+};
+
+let gtaCurrentStep = 0;
+let gtaQuoteInterval;
+let gtaVantaEffect = null;
+let gtaLoading = false;
+
 function addRoblox(){
- const card=document.createElement("div");
- card.className="game-card";
- card.style.backgroundImage="url("+ROBLOX_IMAGE+")";
- card.style.backgroundSize="cover";
- card.style.backgroundPosition="center";
- const label=document.createElement("div");
- label.className="game-name";
- label.textContent="Roblox";
- card.appendChild(label);
- card.onclick=()=>parent.openWindow("https://nowgg.fun","Roblox");
- gamesEl.appendChild(card);
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.style.backgroundImage = "url(" + ROBLOX_IMAGE + ")";
+    const label = document.createElement("div");
+    label.className = "game-name";
+    label.textContent = "Roblox";
+    card.appendChild(label);
+    card.onclick = () => safeOpenWindow("https://nowgg.fun", "Roblox");
+    gamesEl.appendChild(card);
 }
 
 function addGTAViceCity(){
- const card=document.createElement("div");
- card.className="game-card";
- card.style.backgroundImage="url("+GTA_IMAGE+")";
- card.style.backgroundSize="cover";
- card.style.backgroundPosition="center";
- const label=document.createElement("div");
- label.className="game-name";
- label.textContent="GTA Vice City";
- card.appendChild(label);
-
- // ✅ UPDATED: GTA Vice City now loads YOUR new HTML
- card.onclick=()=>parent.openWindow("gtavc-loader.html","GTA Vice City");
-
- gamesEl.appendChild(card);
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.style.backgroundImage = "url(" + GTA_IMAGE + ")";
+    const label = document.createElement("div");
+    label.className = "game-name";
+    label.textContent = "GTA Vice City";
+    card.appendChild(label);
+    
+    card.onclick = () => {
+        openGTAModal();
+    };
+    gamesEl.appendChild(card);
 }
 
-fetch(ZONES+"?t="+Date.now()).then(r=>r.json()).then(data=>{
- games=data.filter(g=>!g.name.toLowerCase().includes("suggest"));
- totalEl.textContent="Total games: "+(games.length+2);
- render(games);
-});
+function openGTAModal() {
+    gtaModal.classList.add('active');
+    startGTALoading();
+}
+
+function closeGTAModal() {
+    gtaModal.classList.remove('active');
+    stopGTALoading();
+    // Reset for next time
+    document.getElementById('gta-loader-content').style.display = 'block';
+    document.getElementById('gta-vanta-bg').style.display = 'block';
+    document.getElementById('gta-game-frame').style.display = 'none';
+    document.getElementById('gta-game-frame').src = '';
+}
+
+function stopGTALoading() {
+    if (gtaQuoteInterval) {
+        clearInterval(gtaQuoteInterval);
+        gtaQuoteInterval = null;
+    }
+    if (gtaVantaEffect) {
+        gtaVantaEffect.destroy();
+        gtaVantaEffect = null;
+    }
+    gtaLoading = false;
+    gtaCurrentStep = 0;
+}
+
+function initGTAVanta() {
+    if (window.VANTA && !gtaVantaEffect) {
+        try {
+            gtaVantaEffect = VANTA.FOG(GTA_CONFIG.vantaSettings);
+        } catch (error) {
+            console.error('Vanta.js initialization error:', error);
+            document.getElementById('gta-vanta-bg').style.background = '#1a1a1a';
+        }
+    }
+}
+
+function getRandomGTAQuote() {
+    return GTA_CONFIG.quotes[Math.floor(Math.random() * GTA_CONFIG.quotes.length)];
+}
+
+function updateGTAQuote() {
+    document.getElementById('gta-quote-text').textContent = getRandomGTAQuote();
+}
+
+function loadActualGTAGame() {
+    document.getElementById('gta-loader-content').style.display = 'none';
+    document.getElementById('gta-vanta-bg').style.display = 'none';
+    const iframe = document.getElementById('gta-game-frame');
+    iframe.style.display = 'block';
+    iframe.src = GTA_CONFIG.gameURL;
+    
+    // Stop vanta to save resources
+    if (gtaVantaEffect) {
+        gtaVantaEffect.destroy();
+        gtaVantaEffect = null;
+    }
+}
+
+function updateGTAProgress() {
+    if (!gtaLoading || gtaCurrentStep >= GTA_CONFIG.loadingSteps.length) {
+        if (gtaLoading) setTimeout(loadActualGTAGame, 500);
+        return;
+    }
+    
+    const step = GTA_CONFIG.loadingSteps[gtaCurrentStep];
+    document.getElementById('gta-status-text').textContent = step.status;
+    document.getElementById('gta-percentage').textContent = step.progress + '%';
+    
+    if (step.progress === 100) {
+        document.getElementById('gta-status-text').classList.add('gta-success');
+        document.getElementById('gta-percentage').classList.add('gta-success');
+    }
+    
+    gtaCurrentStep++;
+    
+    if (gtaCurrentStep < GTA_CONFIG.loadingSteps.length) {
+        const randomFactor = 0.7 + Math.random() * 0.6;
+        const delay = Math.floor(step.time * randomFactor);
+        setTimeout(updateGTAProgress, delay);
+    } else {
+        setTimeout(loadActualGTAGame, 500);
+    }
+}
+
+function startGTALoading() {
+    if (gtaLoading) return;
+    gtaLoading = true;
+    gtaCurrentStep = 0;
+    
+    // Reset UI
+    document.getElementById('gta-status-text').classList.remove('gta-success');
+    document.getElementById('gta-percentage').classList.remove('gta-success');
+    document.getElementById('gta-percentage').textContent = '0%';
+    document.getElementById('gta-status-text').textContent = 'Initializing game engine...';
+    
+    initGTAVanta();
+    updateGTAQuote();
+    gtaQuoteInterval = setInterval(updateGTAQuote, 4000);
+    setTimeout(() => updateGTAProgress(), 500);
+}
+
+fetch(ZONES + "?t=" + Date.now())
+    .then(r => r.ok ? r.json() : Promise.reject('Network error'))
+    .then(data => {
+        games = data.filter(g => !g.name.toLowerCase().includes("suggest"));
+        totalEl.textContent = "Total games: " + (games.length + 2);
+        render(games);
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        totalEl.textContent = "Total games: 2 (offline)";
+        gamesEl.innerHTML = "";
+        addRoblox();
+        addGTAViceCity();
+    });
 
 function render(list){
- gamesEl.innerHTML="";
- addRoblox();
- addGTAViceCity();
- list.forEach(g=>{
-  const card=document.createElement("div");
-  card.className="game-card";
-  card.style.backgroundImage="url("+g.cover.replace("{COVER_URL}",COVER).replace("{HTML_URL}",HTML)+")";
-  const label=document.createElement("div");
-  label.className="game-name";
-  label.textContent=g.name;
-  card.appendChild(label);
-  card.onclick=()=>openGame(g);
-  gamesEl.appendChild(card);
- });
+    gamesEl.innerHTML = "";
+    addRoblox();
+    addGTAViceCity();
+    list.forEach(g => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+        const coverUrl = g.cover ? g.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML) : '';
+        card.style.backgroundImage = "url(" + coverUrl + ")";
+        const label = document.createElement("div");
+        label.className = "game-name";
+        label.textContent = g.name;
+        card.appendChild(label);
+        card.onclick = () => openGame(g);
+        gamesEl.appendChild(card);
+    });
 }
 
-search.oninput=()=>{
- const q=search.value.toLowerCase();
- render(games.filter(g=>g.name.toLowerCase().includes(q)));
+search.oninput = () => {
+    const q = search.value.toLowerCase();
+    render(games.filter(g => g.name.toLowerCase().includes(q)));
 };
 
 function openGame(g){
- const win=window.open("about:blank");
- fetch(g.url.replace("{HTML_URL}",HTML)).then(r=>r.text()).then(t=>{
-  win.document.open();
-  win.document.write(t);
-  win.document.close();
- });
+    const win = window.open("about:blank", "_blank");
+    fetch(g.url.replace("{HTML_URL}", HTML))
+        .then(r => r.text())
+        .then(t => {
+            win.document.open();
+            win.document.write(t);
+            win.document.close();
+        })
+        .catch(err => win.document.write('<h1>Error loading game</h1>'));
 }
 </script>
 
