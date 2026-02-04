@@ -51,31 +51,6 @@
   background: #444;
   color: white;
 }
-
-/* Additional wallpaper button styling */
-#settings button {
-  margin: 4px;
-  padding: 8px 12px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s;
-}
-
-#settings button:hover {
-  background: rgba(255,255,255,0.2);
-  transform: translateY(-1px);
-}
-
-#settings h3 {
-  color: white;
-  margin-top: 16px;
-  margin-bottom: 8px;
-  font-size: 16px;
-}
 </style>
 </head>
 
@@ -122,13 +97,6 @@
   <button onclick="setWallpaper('goku')">Goku</button>
   <button onclick="setWallpaper('naruto')">Naruto</button>
   <button onclick="setWallpaper('surfer')">Silver Surfer</button>
-  <button onclick="setWallpaper('naruto-gif')">Naruto GIF</button>
-  <button onclick="setWallpaper('onepiece')">One Piece</button>
-  <button onclick="setWallpaper('jjk')">JJK</button>
-  <button onclick="setWallpaper('roblox')">Roblox</button>
-  <button onclick="setWallpaper('fortnite')">Fortnite</button>
-  <button onclick="setWallpaper('dbz')">Dragon Ball Z</button>
-  <button onclick="setWallpaper('tungtung')">Tung Tung Sahur</button>
 
   <h3>Cloak</h3>
   <button onclick="setBlank()">about:blank</button>
@@ -139,30 +107,6 @@
 </div>
 
 <script>
-const wallpapers = {
-  'goku': 'goku.jpg',
-  'naruto': 'naruto.jpg',
-  'surfer': 'silver_surfer.jpg',
-  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0',
-  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg',
-  'jjk': 'https://wallpapercave.com/wp/wp9745449.png',
-  'roblox': 'https://wallpaperaccess.com/full/196936.jpg',
-  'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg',
-  'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg',
-  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3'
-};
-
-function setWallpaper(name) {
-  const url = wallpapers[name];
-  if (url) {
-    document.body.style.backgroundImage = `url('${url}')`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    document.body.style.backgroundRepeat = 'no-repeat';
-    document.body.style.backgroundAttachment = 'fixed';
-  }
-}
-
 function closeVote() {
   document.getElementById('votePopup').style.display = 'none';
 }
