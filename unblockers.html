@@ -1,80 +1,844 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Unblockers</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassroomSpot | Educational Web Proxy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --bg-dark: #0f172a;
+            --bg-light: #f8fafc;
+            --surface-dark: rgba(30, 41, 59, 0.8);
+            --surface-light: rgba(255, 255, 255, 0.8);
+            --text-dark: #e2e8f0;
+            --text-light: #1e293b;
+            --border-dark: rgba(255, 255, 255, 0.1);
+            --border-light: rgba(0, 0, 0, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
-    }
+        [data-theme="light"] {
+            --bg: var(--bg-light);
+            --surface: var(--surface-light);
+            --text: var(--text-light);
+            --border: var(--border-light);
+        }
 
-    header {
-      padding: 15px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-      background: #1a1a1a;
-      border-bottom: 1px solid #333;
-    }
+        [data-theme="dark"] {
+            --bg: var(--bg-dark);
+            --surface: var(--surface-dark);
+            --text: var(--text-dark);
+            --border: var(--border-dark);
+        }
 
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      padding: 15px;
-      background: #111;
-    }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: var(--transition);
+        }
 
-    button {
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #2b2b2b;
-      color: white;
-      transition: 0.2s;
-    }
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
 
-    button:hover {
-      background: #444;
-      transform: scale(1.05);
-    }
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 20% 80%, var(--primary) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, var(--secondary) 0%, transparent 50%);
+            animation: float 20s infinite ease-in-out;
+            opacity: 0.15;
+        }
 
-    iframe {
-      width: 100%;
-      height: calc(100vh - 120px);
-      border: none;
-      background: black;
-    }
-  </style>
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            -webkit-text-fill-color: white;
+            font-size: 1.25rem;
+        }
+
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover { transform: scale(1.05); box-shadow: var(--shadow); }
+
+        .search-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        h1 { 
+            font-size: 3rem; 
+            margin-bottom: 1rem; 
+            font-weight: 800; 
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle { font-size: 1.125rem; opacity: 0.8; margin-bottom: 2rem; }
+
+        .search-container { max-width: 800px; margin: 0 auto; }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            gap: 0.5rem;
+        }
+
+        .search-box:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 1rem 1.5rem;
+            font-size: 1.125rem;
+            color: var(--text);
+            outline: none;
+        }
+
+        .search-input::placeholder { color: var(--text); opacity: 0.5; }
+
+        .proxy-select {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.75rem;
+            color: var(--text);
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .mode-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            border: 1px solid var(--border);
+        }
+
+        .mode-indicator.direct { border-color: #10b981; color: #10b981; }
+        .mode-indicator.proxy { border-color: #f59e0b; color: #f59e0b; }
+
+        .quick-access { margin-bottom: 3rem; animation: fadeIn 0.8s ease-out 0.4s both; }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .tile {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tile::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .tile:hover::before { opacity: 0.1; }
+        .tile:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .tile-icon {
+            width: 48px; height: 48px;
+            margin: 0 auto 0.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .tile-title { font-weight: 600; font-size: 0.9rem; }
+
+        .proxy-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #f59e0b;
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            animation: fadeIn 0.8s ease-out 0.6s both;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+
+        .feature-icon {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            opacity: 0.6;
+            font-size: 0.875rem;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PROXY FRAME - NOW WITH DARK BACKGROUND */
+        .proxy-frame {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg-dark); /* Always use dark background */
+            z-index: 999;
+            flex-direction: column;
+        }
+
+        .proxy-frame.active { display: flex; }
+
+        .proxy-header {
+            background: var(--surface-dark); /* Always dark surface */
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-dark);
+            backdrop-filter: blur(20px);
+            flex-wrap: wrap;
+        }
+
+        .proxy-url {
+            flex: 1;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            font-family: monospace;
+            min-width: 200px;
+        }
+
+        .proxy-close {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .proxy-close:hover { transform: scale(1.05); }
+
+        /* IFRAME WITH DARK BACKGROUND FALLBACK */
+        .proxy-iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: var(--bg-dark); /* Dark background instead of white */
+            color: var(--text-dark);
+        }
+
+        /* LOADING STATE */
+        .loading-overlay {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.active { display: block; }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-dark);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
+
+        /* ERROR MESSAGE */
+        .error-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--surface-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            z-index: 1001;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .error-message.active { display: block; }
+
+        .error-message h3 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .error-message p {
+            color: var(--text-dark);
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .retry-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0 0.25rem;
+            transition: var(--transition);
+        }
+
+        .retry-btn:hover { transform: scale(1.05); }
+
+        .retry-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .search-box { flex-wrap: wrap; }
+            .proxy-select { width: 100%; }
+            .search-btn { width: 100%; }
+        }
+    </style>
 </head>
-<body>
+<body data-theme="dark">
+    <div class="bg-animation"></div>
 
-  <header>Unblockers</header>
+    <!-- Proxy Frame with Dark Theme -->
+    <div class="proxy-frame" id="proxyFrame">
+        <div class="proxy-header">
+            <div class="proxy-url" id="proxyUrl">https://example.com</div>
+            <button class="proxy-close" onclick="closeProxy()">✕ Close</button>
+        </div>
+        
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+            <div class="loading-text">Loading site...</div>
+        </div>
 
-  <div class="buttons">
-    <button onclick="loadSite('https://etherealwebeprox.vercel.app/')">
-      Ethereal
-    </button>
+        <iframe class="proxy-iframe" id="proxyIframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
+    </div>
 
-    <button onclick="loadSite('https://funny67.vercel.app/')">
-      Interstellar
-    </button>
-  </div>
+    <!-- Error Message -->
+    <div class="error-message" id="errorMessage">
+        <h3>⚠️ Unable to Load Site</h3>
+        <p id="errorText">This site blocks direct embedding.</p>
+        <button class="retry-btn" onclick="retryWithProxy()">Try with Proxy</button>
+        <button class="retry-btn secondary" onclick="closeError()">Cancel</button>
+    </div>
 
-  <iframe id="preview"></iframe>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">📚</div>
+                ClassroomSpot
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </header>
 
-  <script>
-    function loadSite(url) {
-      document.getElementById("preview").src = url;
-    }
-  </script>
+        <section class="search-section">
+            <h1>ClassroomSpot Web</h1>
+            <p class="subtitle">Smart proxy detection — automatically bypasses restrictions</p>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="urlInput" 
+                           placeholder="Enter URL (e.g., wikipedia.org)" 
+                           onkeypress="handleKeyPress(event)">
+                    <select class="proxy-select" id="proxyMode" onchange="updateMode()">
+                        <option value="auto">🤖 Auto (Smart Detect)</option>
+                        <option value="direct">🚀 Direct (No Proxy)</option>
+                        <option value="cors">🛡️ CORS Proxy (AllOrigins)</option>
+                        <option value="codetabs">🔀 CodeTabs Proxy</option>
+                    </select>
+                    <button class="search-btn" onclick="browseUrl()">Browse →</button>
+                </div>
+                <div class="mode-indicator direct" id="modeIndicator">
+                    <span>●</span> <span id="modeText">Auto Mode: Will try direct first, then proxy</span>
+                </div>
+            </div>
+        </section>
 
+        <section class="quick-access">
+            <h2 class="section-title">
+                <span>⚡</span>
+                Quick Access
+            </h2>
+            <div class="tiles-grid">
+                <a href="#" class="tile" onclick="openProxy('https://wikipedia.org', false); return false;">
+                    <div class="tile-icon">W</div>
+                    <div class="tile-title">Wikipedia</div>
+                </a>
+                <a href="#" class="tile" onclick="openProxy('https://khanacademy.org', false); return false;">
+                    <div class="tile-icon">K</div>
+                    <div class="tile-title">Khan Academy</div>
+                </a>
+                <a href="#" class="tile" onclick="openProxy('https://coursera.org', true); return false;">
+                    <div class="tile-icon">C</div>
+                    <div class="tile-title">Coursera</div>
+                    <span class="proxy-badge">PROXY</span>
+                </a>
+                <a href="#" class="tile" onclick="openProxy('https://scholar.google.com', true); return false;">
+                    <div class="tile-icon">S</div>
+                    <div class="tile-title">Scholar</div>
+                    <span class="proxy-badge">PROXY</span>
+                </a>
+                <a href="#" class="tile" onclick="openProxy('https://archive.org', false); return false;">
+                    <div class="tile-icon">A</div>
+                    <div class="tile-title">Archive</div>
+                </a>
+                <a href="#" class="tile" onclick="openProxy('https://github.com', true); return false;">
+                    <div class="tile-icon">G</div>
+                    <div class="tile-title">GitHub</div>
+                    <span class="proxy-badge">PROXY</span>
+                </a>
+                <a href="#" class="tile" onclick="openProxy('https://stackoverflow.com', false); return false;">
+                    <div class="tile-icon">S</div>
+                    <div class="tile-title">Stack Overflow</div>
+                </a>
+                <a href="#" class="tile" onclick="openProxy('https://news.ycombinator.com', false); return false;">
+                    <div class="tile-icon">H</div>
+                    <div class="tile-title">Hacker News</div>
+                </a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3 class="feature-title">Smart Detection</h3>
+                <p>Automatically detects blocked sites and switches to CORS proxy mode instantly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3 class="feature-title">Multiple Proxies</h3>
+                <p>Built-in fallback to multiple CORS proxy services for maximum compatibility.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Fast Direct</h3>
+                <p>Uses direct connection for compatible sites — faster loading, no middleman.</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2024 ClassroomSpot. For educational purposes only.</p>
+            <p>Respect website terms of service and institutional policies.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Configuration
+        const PROXY_SERVICES = {
+            cors: 'https://api.allorigins.win/raw?url=',
+            codetabs: 'https://api.codetabs.com/v1/proxy?quest=',
+            allorigins: 'https://api.allorigins.win/get?url='
+        };
+
+        let currentUrl = '';
+        let currentMode = 'auto';
+        let retryCount = 0;
+        let loadTimeout = null;
+
+        // Theme Management
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            icon.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeIcon').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+        // Mode Management
+        function updateMode() {
+            const select = document.getElementById('proxyMode');
+            const indicator = document.getElementById('modeIndicator');
+            const modeText = document.getElementById('modeText');
+            
+            currentMode = select.value;
+            
+            indicator.className = 'mode-indicator';
+            if (currentMode === 'direct') {
+                indicator.classList.add('direct');
+                modeText.textContent = 'Direct Mode: No proxy (may fail on some sites)';
+            } else if (currentMode === 'auto') {
+                indicator.classList.add('direct');
+                modeText.textContent = 'Auto Mode: Smart detection with fallback';
+            } else {
+                indicator.classList.add('proxy');
+                modeText.textContent = 'Proxy Mode: Using CORS proxy for all requests';
+            }
+        }
+
+        // URL Handling
+        function browseUrl() {
+            const input = document.getElementById('urlInput');
+            let url = input.value.trim();
+            
+            if (!url) return;
+            
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            
+            const forceProxy = currentMode !== 'direct' && currentMode !== 'auto';
+            openProxy(url, forceProxy);
+            input.value = '';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') browseUrl();
+        }
+
+        // Smart Proxy Logic
+        function getProxyUrl(url, service = 'cors') {
+            return PROXY_SERVICES[service] + encodeURIComponent(url);
+        }
+
+        function isLikelyBlocked(url) {
+            const blockedDomains = [
+                'google.com', 'facebook.com', 'instagram.com', 'twitter.com', 
+                'x.com', 'youtube.com', 'linkedin.com', 'reddit.com',
+                'netflix.com', 'amazon.com', 'microsoft.com', 'apple.com',
+                'coursera.org', 'udemy.com', 'github.com', 'gitlab.com'
+            ];
+            
+            try {
+                const hostname = new URL(url).hostname.toLowerCase();
+                return blockedDomains.some(domain => hostname.includes(domain));
+            } catch {
+                return false;
+            }
+        }
+
+        // Main Proxy Function
+        function openProxy(url, forceProxy = false) {
+            currentUrl = url;
+            retryCount = 0;
+            
+            const frame = document.getElementById('proxyFrame');
+            const iframe = document.getElementById('proxyIframe');
+            const urlDisplay = document.getElementById('proxyUrl');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            urlDisplay.textContent = url;
+            frame.classList.add('active');
+            loadingOverlay.classList.add('active');
+            
+            // Determine loading strategy
+            let targetUrl = url;
+            
+            if (forceProxy || currentMode === 'cors') {
+                targetUrl = getProxyUrl(url, 'cors');
+            } else if (currentMode === 'codetabs') {
+                targetUrl = getProxyUrl(url, 'codetabs');
+            } else if (currentMode === 'auto' && isLikelyBlocked(url)) {
+                targetUrl = getProxyUrl(url, 'cors');
+                console.log('Auto-switching to proxy for likely blocked site:', url);
+            }
+            
+            // Clear any existing timeout
+            if (loadTimeout) clearTimeout(loadTimeout);
+            
+            // Set iframe source
+            iframe.src = targetUrl;
+            
+            // Handle load success
+            iframe.onload = () => {
+                loadingOverlay.classList.remove('active');
+                console.log('Frame loaded successfully');
+            };
+            
+            // Handle load error
+            iframe.onerror = () => {
+                loadingOverlay.classList.remove('active');
+                handleLoadError();
+            };
+            
+            // Timeout for auto mode
+            loadTimeout = setTimeout(() => {
+                if (loadingOverlay.classList.contains('active')) {
+                    // Still loading after 5 seconds, might be blocked
+                    loadingOverlay.classList.remove('active');
+                    if (currentMode === 'auto' && !forceProxy) {
+                        showError();
+                    }
+                }
+            }, 5000);
+        }
+
+        function handleLoadError() {
+            if (currentMode === 'auto' && retryCount === 0) {
+                showError();
+            } else if (currentMode === 'direct') {
+                showError();
+            }
+        }
+
+        function showError() {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            try {
+                const hostname = new URL(currentUrl).hostname;
+                errorText.textContent = `Unable to load ${hostname}. The site blocks iframe embedding or requires a proxy.`;
+            } catch {
+                errorText.textContent = 'Unable to load this site. It may block iframe embedding.';
+            }
+            errorDiv.classList.add('active');
+        }
+
+        function closeError() {
+            document.getElementById('errorMessage').classList.remove('active');
+        }
+
+        function retryWithProxy() {
+            closeError();
+            const iframe = document.getElementById('proxyIframe');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const urlDisplay = document.getElementById('proxyUrl');
+            
+            loadingOverlay.classList.add('active');
+            
+            // Try different proxy services
+            const services = ['cors', 'codetabs'];
+            const service = services[retryCount % services.length];
+            
+            iframe.src = getProxyUrl(currentUrl, service);
+            retryCount++;
+            
+            urlDisplay.textContent = `[Proxy] ${currentUrl}`;
+            
+            // Set timeout for proxy load
+            setTimeout(() => {
+                loadingOverlay.classList.remove('active');
+            }, 3000);
+        }
+
+        function closeProxy() {
+            const frame = document.getElementById('proxyFrame');
+            const iframe = document.getElementById('proxyIframe');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            frame.classList.remove('active');
+            iframe.src = '';
+            loadingOverlay.classList.remove('active');
+            currentUrl = '';
+            retryCount = 0;
+            if (loadTimeout) clearTimeout(loadTimeout);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('errorMessage').classList.contains('active')) {
+                    closeError();
+                } else {
+                    closeProxy();
+                }
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('urlInput').focus();
+            }
+        });
+
+        // Initialize
+        updateMode();
+    </script>
 </body>
 </html>
