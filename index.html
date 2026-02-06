@@ -182,6 +182,88 @@
   height: 20px;
   border-radius: 50%;
 }
+
+/* Apps Grid Panel */
+.apps-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #111;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.9);
+  z-index: 1002;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.apps-panel.hidden {
+  display: none;
+}
+
+.apps-panel h2 {
+  color: white;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.apps-grid {
+  display: fixed;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 20px;
+}
+
+.app-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.app-item:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-5px);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.app-item img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  object-fit: cover;
+}
+
+.app-item span {
+  color: white;
+  font-size: 12px;
+  text-align: center;
+}
+
+.close-apps-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #e50914;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 14px;
+}
+
+.close-apps-btn:hover {
+  background: #ff1a25;
+}
 </style>
 </head>
 
@@ -192,26 +274,71 @@
   <div id="voteBox">
     <h2>❤️ Support Us</h2>
     <p>Do you love our site?<br>Please support us by voting on our site!</p>
-    <button id="voteBtn" onclick="window.open('https://ubghub.org/?site=classroomspot ','_blank')">
+    <button id="voteBtn" onclick="window.open('https://ubghub.org/?site=classroomspot   ','_blank')">
       Vote
     </button>
     <button id="closeVote" onclick="closeVote()">Exit</button>
   </div>
 </div>
 
-<a href="classroomspot-ai.html" style="display:inline-block;margin:10px;padding:12px 16px;background:#e50914;color:#fff;border-radius:8px;text-decoration:none;">
-  ClassroomSpot AI
-</a>
+<!-- APPS PANEL -->
+<div id="appsPanel" class="apps-panel hidden">
+  <h2>📱 Apps</h2>
+  <div class="apps-grid">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Discord ', 'Discord')">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/discord/discord-original.svg " alt="Discord">
+      <span>Discord</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Amazon%20Luna ', 'Amazon Luna')">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Amazon_Luna_logo.svg/1200px-Amazon_Luna_logo.svg.png " alt="Amazon Luna">
+      <span>Amazon Luna</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=TikTok ', 'TikTok')">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tiktok/tiktok-original.svg " alt="TikTok">
+      <span>TikTok</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Poki ', 'Poki')">
+      <img src="https://poki.com/favicon.ico " alt="Poki">
+      <span>Poki</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Snapchat ', 'Snapchat')">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/snapchat/snapchat-original.svg " alt="Snapchat">
+      <span>Snapchat</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitch ', 'Twitch')">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitch/twitch-original.svg " alt="Twitch">
+      <span>Twitch</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitter%20X ', 'Twitter X')">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg " alt="Twitter X">
+      <span>Twitter X</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=OpenAI ', 'ChatGPT')">
+      <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png " alt="ChatGPT">
+      <span>ChatGPT</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Geforce%20NOW ', 'GeForce NOW')">
+      <img src="https://www.nvidia.com/favicon.ico " alt="GeForce NOW">
+      <span>GeForce NOW</span>
+    </div>
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Soundcloud ', 'SoundCloud')">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/soundcloud/soundcloud-original.svg " alt="SoundCloud">
+      <span>SoundCloud</span>
+    </div>
+    <div class="app-item" onclick="openGnMovies()" style="background: linear-gradient(135deg, #4a148c 0%, #000000 100%);">
+      <img src="https://cdn-icons-png.flaticon.com/512/44/44957.png " alt="GN Movies" style="filter: invert(1);">
+      <span>GN Movies</span>
+    </div>
+  </div>
+  <button class="close-apps-btn" onclick="closeApps()">Close</button>
+</div>
 
 <div class="dock">
   <button onclick="openWindow('games.html','Games')">Games</button>
   <button onclick="openWindow('movies.html','Movies')">Movies</button>
   <button onclick="openWindow('partners.html','Partners')">Partners</button>
   <button onclick="openWindow('unblockers.html','Unblocker')">Unblocker</button>
-  <button onclick="openWindow('classroomspot-ai.html','AI Math')" class="ai-math-btn">
-    <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png">
-    AI Math
-  </button>
+  <button onclick="openApps()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-weight: bold;">📦 Apps</button>
   <button onclick="openSettings()">⚙</button>
 </div>
 
@@ -249,13 +376,13 @@ const wallpapers = {
   'goku': 'goku.jpg',
   'naruto': 'naruto.jpg',
   'surfer': 'silver_surfer.jpg',
-  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0',
-  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg',
-  'jjk': 'https://wallpapercave.com/wp/wp9745449.png',
-  'roblox': 'https://wallpaperaccess.com/full/196936.jpg',
-  'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg',
-  'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg',
-  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3'
+  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0  ',
+  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg  ',
+  'jjk': 'https://wallpapercave.com/wp/wp9745449.png  ',
+  'roblox': 'https://wallpaperaccess.com/full/196936.jpg  ',
+  'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg  ',
+  'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg  ',
+  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3  '
 };
 
 // Open window with content
@@ -276,6 +403,55 @@ function closeWindow() {
   
   frame.src = '';
   win.classList.add('hidden');
+}
+
+// Apps panel functions
+function openApps() {
+  document.getElementById('appsPanel').classList.remove('hidden');
+}
+
+function closeApps() {
+  document.getElementById('appsPanel').classList.add('hidden');
+}
+
+// Open specific app in window
+function openApp(url, title) {
+  closeApps();
+  const win = document.getElementById('window');
+  const frame = document.getElementById('frame');
+  const titleSpan = document.getElementById('windowTitle');
+  
+  frame.src = url;
+  titleSpan.textContent = title;
+  win.classList.remove('hidden');
+}
+
+// Open GN Movies with the launcher HTML
+function openGnMovies() {
+  closeApps();
+  const url = "https://raw.githubusercontent.com/GN-math-hub/School-Chaets/refs/heads/main/GN%20Movies%202026%20 !!!";
+  
+  fetch(url + "?" + Date.now())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(text => {
+      const newWin = window.open("about:blank", "_blank");
+      if (newWin) {
+        newWin.document.open();
+        newWin.document.write(text);
+        newWin.document.close();
+      } else {
+        alert('Popup blocked! Please allow popups for this site.');
+      }
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+      alert('Failed to load content. Please check the URL.');
+    });
 }
 
 // Settings functions
