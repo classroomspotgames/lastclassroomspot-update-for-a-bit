@@ -29,241 +29,96 @@
   box-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
-#voteBox h2 {
-  margin-top: 0;
-}
+#voteBox h2 { margin-top: 0; }
+#voteBox button { margin: 8px; padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+#voteBtn { background: #e50914; color: white; }
+#closeVote { background: #444; color: white; }
 
-#voteBox button {
-  margin: 8px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-#voteBtn {
-  background: #e50914;
-  color: white;
-}
-
-#closeVote {
-  background: #444;
-  color: white;
-}
-
-/* Button styling for dock */
+/* Dock buttons */
 .dock button {
-  margin: 4px;
-  padding: 8px 16px;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
+  margin: 4px; padding: 8px 16px; background: rgba(255,255,255,0.1);
+  border: none; border-radius: 8px; color: white; cursor: pointer;
+  font-size: 14px; transition: all 0.2s;
 }
+.dock button:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
-.dock button:hover {
-  background: rgba(255,255,255,0.2);
-  transform: translateY(-2px);
-}
-
-/* Additional wallpaper button styling */
+/* Settings buttons */
 #settings button {
-  margin: 4px;
-  padding: 8px 12px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s;
+  margin: 4px; padding: 8px 12px; background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 6px;
+  color: white; cursor: pointer; font-size: 13px; transition: all 0.2s;
 }
+#settings button:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+#settings h3 { color: white; margin-top: 16px; margin-bottom: 8px; font-size: 16px; }
 
-#settings button:hover {
-  background: rgba(255,255,255,0.2);
-  transform: translateY(-1px);
-}
-
-#settings h3 {
-  color: white;
-  margin-top: 16px;
-  margin-bottom: 8px;
-  font-size: 16px;
-}
-
-/* Hidden window styling */
+/* Window styling */
 .window {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background: #111;
-  border-radius: 12px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.8);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 80%; height: 80%; background: #111; border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8); z-index: 1000;
+  display: flex; flex-direction: column; overflow: hidden;
 }
-
-.window.hidden {
-  display: none;
-}
-
+.window.hidden { display: none; }
 .topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  background: #222;
-  border-bottom: 1px solid #333;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 15px; background: #222; border-bottom: 1px solid #333;
 }
-
-.topbar span {
-  color: white;
-  font-weight: bold;
-}
-
-.topbar button {
-  background: #e50914;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.topbar button:hover {
-  background: #ff1a25;
-}
-
-#frame {
-  flex: 1;
-  width: 100%;
-  border: none;
-  background: white;
-}
+.topbar span { color: white; font-weight: bold; }
+.topbar button { background: #e50914; border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+.topbar button:hover { background: #ff1a25; }
+#frame { flex: 1; width: 100%; border: none; background: white; }
 
 /* Settings panel */
 .settings {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #111;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.8);
-  z-index: 1001;
-  max-width: 400px;
-  width: 90%;
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: #111; padding: 20px; border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8); z-index: 1001;
+  max-width: 400px; width: 90%;
 }
-
-.settings.hidden {
-  display: none;
-}
-
-/* AI Math button specific styling */
-.ai-math-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,0.1) !important;
-}
-
-.ai-math-btn img {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-}
+.settings.hidden { display: none; }
 
 /* Apps Grid Panel */
 .apps-panel {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #111;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.9);
-  z-index: 1002;
-  max-width: 600px;
-  width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: #111; padding: 30px; border-radius: 16px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.9); z-index: 1002;
+  max-width: 700px; width: 90%; max-height: 80vh; overflow-y: auto;
 }
-
-.apps-panel.hidden {
-  display: none;
-}
-
-.apps-panel h2 {
-  color: white;
-  margin-top: 0;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
+.apps-panel.hidden { display: none; }
+.apps-panel h2 { color: white; margin-top: 0; margin-bottom: 20px; text-align: center; }
 .apps-grid {
-  display: fixed;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 20px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px;
 }
-
 .app-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 2px solid transparent;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 15px; background: rgba(255,255,255,0.05);
+  border-radius: 12px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent;
 }
-
-.app-item:hover {
-  background: rgba(255,255,255,0.1);
-  transform: translateY(-5px);
-  border-color: rgba(255,255,255,0.2);
-}
-
-.app-item img {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  margin-bottom: 8px;
-  object-fit: cover;
-}
-
-.app-item span {
-  color: white;
-  font-size: 12px;
-  text-align: center;
-}
-
+.app-item:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
+.app-item img { width: 48px; height: 48px; border-radius: 12px; margin-bottom: 8px; object-fit: cover; }
+.app-item span { color: white; font-size: 12px; text-align: center; }
 .close-apps-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background: #e50914;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 14px;
+  margin-top: 20px; padding: 10px 20px; background: #e50914; color: white;
+  border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 14px;
 }
+.close-apps-btn:hover { background: #ff1a25; }
 
-.close-apps-btn:hover {
-  background: #ff1a25;
+/* GN Movies Window */
+.gn-movies-window {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 90%; height: 90%; background: #000; border-radius: 12px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.9); z-index: 1003;
+  display: flex; flex-direction: column; overflow: hidden;
 }
+.gn-movies-window.hidden { display: none; }
+.gn-movies-content { flex: 1; width: 100%; border: none; background: #000; }
+.launch-button {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%; background-color: #000000; color: #ffffff;
+  font-family: Arial, sans-serif; font-size: 24px; font-weight: bold;
+  cursor: pointer; text-decoration: none; transition: background-color 0.3s, transform 0.2s; border: none;
+}
+.launch-button:hover { background-color: #4a148c; }
 </style>
 </head>
 
@@ -274,9 +129,7 @@
   <div id="voteBox">
     <h2>❤️ Support Us</h2>
     <p>Do you love our site?<br>Please support us by voting on our site!</p>
-    <button id="voteBtn" onclick="window.open('https://ubghub.org/?site=classroomspot   ','_blank')">
-      Vote
-    </button>
+    <button id="voteBtn" onclick="window.open('https://ubghub.org/?site=classroomspot','_blank')">Vote</button>
     <button id="closeVote" onclick="closeVote()">Exit</button>
   </div>
 </div>
@@ -285,52 +138,63 @@
 <div id="appsPanel" class="apps-panel hidden">
   <h2>📱 Apps</h2>
   <div class="apps-grid">
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Discord ', 'Discord')">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/discord/discord-original.svg " alt="Discord">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Discord', 'Discord')">
+      <img src="https://tse2.mm.bing.net/th/id/OIP.JxDw-5bFs4goAom52j2g5gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Discord">
       <span>Discord</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Amazon%20Luna ', 'Amazon Luna')">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Amazon_Luna_logo.svg/1200px-Amazon_Luna_logo.svg.png " alt="Amazon Luna">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Amazon%20Luna', 'Amazon Luna')">
+      <img src="https://tse4.mm.bing.net/th/id/OIP.tjzLkaddOhhyYu8kSFZawQAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Amazon Luna">
       <span>Amazon Luna</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=TikTok ', 'TikTok')">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tiktok/tiktok-original.svg " alt="TikTok">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=TikTok', 'TikTok')">
+      <img src="https://tse3.mm.bing.net/th/id/OIP.K27Zig7nc-qgGAgSXxIzHQHaHv?rs=1&pid=ImgDetMain&o=7&rm=3" alt="TikTok">
       <span>TikTok</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Poki ', 'Poki')">
-      <img src="https://poki.com/favicon.ico " alt="Poki">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Poki', 'Poki')">
+      <img src="https://poki.com/favicon.ico" alt="Poki">
       <span>Poki</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Snapchat ', 'Snapchat')">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/snapchat/snapchat-original.svg " alt="Snapchat">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Snapchat', 'Snapchat')">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.SrWb9kN1ONDZkmQpPvPEeQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Snapchat">
       <span>Snapchat</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitch ', 'Twitch')">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitch/twitch-original.svg " alt="Twitch">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitch', 'Twitch')">
+      <img src="https://tse2.mm.bing.net/th/id/OIP.A6d3GeTfIuEPNdnEKaX6OgHaHZ?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Twitch">
       <span>Twitch</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitter%20X ', 'Twitter X')">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg " alt="Twitter X">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitter%20X', 'Twitter X')">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg" alt="Twitter X">
       <span>Twitter X</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=OpenAI ', 'ChatGPT')">
-      <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png " alt="ChatGPT">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=OpenAI', 'ChatGPT')">
+      <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png" alt="ChatGPT">
       <span>ChatGPT</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Geforce%20NOW ', 'GeForce NOW')">
-      <img src="https://www.nvidia.com/favicon.ico " alt="GeForce NOW">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Geforce%20NOW', 'GeForce NOW')">
+      <img src="https://www.nvidia.com/favicon.ico" alt="GeForce NOW">
       <span>GeForce NOW</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Soundcloud ', 'SoundCloud')">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/soundcloud/soundcloud-original.svg " alt="SoundCloud">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Soundcloud', 'SoundCloud')">
+      <img src="https://th.bing.com/th/id/OIP.45nAc9ORAJayclyJBZVK-wHaHa?w=154&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="SoundCloud">
       <span>SoundCloud</span>
     </div>
-    <div class="app-item" onclick="openGnMovies()" style="background: linear-gradient(135deg, #4a148c 0%, #000000 100%);">
-      <img src="https://cdn-icons-png.flaticon.com/512/44/44957.png " alt="GN Movies" style="filter: invert(1);">
+    <div class="app-item" onclick="openGnMoviesWindow()">
+      <img src="https://cdn-icons-png.flaticon.com/512/44/44957.png" alt="GN Movies" style="filter: invert(1);">
       <span>GN Movies</span>
     </div>
   </div>
   <button class="close-apps-btn" onclick="closeApps()">Close</button>
+</div>
+
+<!-- GN MOVIES WINDOW -->
+<div id="gnMoviesWindow" class="gn-movies-window hidden">
+  <div class="topbar">
+    <span>GN Movies</span>
+    <button onclick="closeGnMoviesWindow()">✕</button>
+  </div>
+  <div class="gn-movies-content">
+    <button class="launch-button" onclick="launchGnMovies()">Launch App</button>
+  </div>
 </div>
 
 <div class="dock">
@@ -373,97 +237,60 @@
 
 <script>
 const wallpapers = {
-  'goku': 'goku.jpg',
-  'naruto': 'naruto.jpg',
-  'surfer': 'silver_surfer.jpg',
-  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0  ',
-  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg  ',
-  'jjk': 'https://wallpapercave.com/wp/wp9745449.png  ',
-  'roblox': 'https://wallpaperaccess.com/full/196936.jpg  ',
-  'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg  ',
-  'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg  ',
-  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3  '
+  'goku': 'goku.jpg', 'naruto': 'naruto.jpg', 'surfer': 'silver_surfer.jpg',
+  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0',
+  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg',
+  'jjk': 'https://wallpapercave.com/wp/wp9745449.png',
+  'roblox': 'https://wallpaperaccess.com/full/196936.jpg',
+  'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg',
+  'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg',
+  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3'
 };
 
-// Open window with content
 function openWindow(url, title) {
   const win = document.getElementById('window');
   const frame = document.getElementById('frame');
   const titleSpan = document.getElementById('windowTitle');
-  
-  frame.src = url;
-  titleSpan.textContent = title;
-  win.classList.remove('hidden');
+  frame.src = url; titleSpan.textContent = title; win.classList.remove('hidden');
 }
 
-// Close the window
 function closeWindow() {
   const win = document.getElementById('window');
   const frame = document.getElementById('frame');
-  
-  frame.src = '';
-  win.classList.add('hidden');
+  frame.src = ''; win.classList.add('hidden');
 }
 
-// Apps panel functions
-function openApps() {
-  document.getElementById('appsPanel').classList.remove('hidden');
-}
+function openApps() { document.getElementById('appsPanel').classList.remove('hidden'); }
+function closeApps() { document.getElementById('appsPanel').classList.add('hidden'); }
 
-function closeApps() {
-  document.getElementById('appsPanel').classList.add('hidden');
-}
-
-// Open specific app in window
 function openApp(url, title) {
   closeApps();
   const win = document.getElementById('window');
   const frame = document.getElementById('frame');
   const titleSpan = document.getElementById('windowTitle');
-  
-  frame.src = url;
-  titleSpan.textContent = title;
-  win.classList.remove('hidden');
+  frame.src = url; titleSpan.textContent = title; win.classList.remove('hidden');
 }
 
-// Open GN Movies with the launcher HTML
-function openGnMovies() {
-  closeApps();
-  const url = "https://raw.githubusercontent.com/GN-math-hub/School-Chaets/refs/heads/main/GN%20Movies%202026%20 !!!";
-  
-  fetch(url + "?" + Date.now())
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.text();
-    })
-    .then(text => {
-      const newWin = window.open("about:blank", "_blank");
-      if (newWin) {
-        newWin.document.open();
-        newWin.document.write(text);
-        newWin.document.close();
-      } else {
-        alert('Popup blocked! Please allow popups for this site.');
-      }
-    })
-    .catch(error => {
-      console.error('Fetch error:', error);
-      alert('Failed to load content. Please check the URL.');
-    });
+function openGnMoviesWindow() { closeApps(); document.getElementById('gnMoviesWindow').classList.remove('hidden'); }
+function closeGnMoviesWindow() { document.getElementById('gnMoviesWindow').classList.add('hidden'); }
+
+function launchGnMovies() {
+  try {
+    const url = "https://raw.githubusercontent.com/GN-math-hub/School-Chaets/refs/heads/main/GN%20Movies%202026%20!!!";
+    fetch(url + "?" + Date.now())
+      .then(response => { if (!response.ok) throw new Error('Network response was not ok'); return response.text(); })
+      .then(text => {
+        const newWin = window.open("about:blank", "_blank");
+        if (newWin) { newWin.document.open(); newWin.document.write(text); newWin.document.close(); }
+        else { alert('Popup blocked! Please allow popups for this site.'); }
+      })
+      .catch(error => { console.error('Fetch error:', error); alert('Failed to load content. Please check the URL.'); });
+  } catch (error) { console.error('error:', error); }
 }
 
-// Settings functions
-function openSettings() {
-  document.getElementById('settings').classList.remove('hidden');
-}
+function openSettings() { document.getElementById('settings').classList.remove('hidden'); }
+function closeSettings() { document.getElementById('settings').classList.add('hidden'); }
 
-function closeSettings() {
-  document.getElementById('settings').classList.add('hidden');
-}
-
-// Set wallpaper
 function setWallpaper(name) {
   const url = wallpapers[name];
   if (url) {
@@ -475,67 +302,24 @@ function setWallpaper(name) {
   }
 }
 
-// Open about:blank cloaker - opens new tab with hidden content
 function openAboutBlank() {
   const win = window.open('about:blank', '_blank');
   if (win) {
-    win.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>about:blank</title>
-        <style>
-          body {
-            margin: 0;
-            padding: 0;
-            background: #000;
-            overflow: hidden;
-          }
-          #cloak-frame {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            border: none;
-          }
-          .hidden { display: none; }
-        </style>
-      </head>
-      <body>
-        <iframe id="cloak-frame" src="${window.location.href}"></iframe>
-        <script>
-          // Prevent URL from showing by keeping focus
-          setInterval(function() {
-            window.history.replaceState({}, 'about:blank', 'about:blank');
-          }, 100);
-        <\/script>
-      </body>
-      </html>
-    `);
+    win.document.write(`<!DOCTYPE html><html><head><title>about:blank</title><style>body{margin:0;padding:0;background:#000;overflow:hidden;}#cloak-frame{position:fixed;top:0;left:0;width:100vw;height:100vh;border:none;}</style></head><body><iframe id="cloak-frame" src="${window.location.href}"></iframe><script>setInterval(function(){window.history.replaceState({},'about:blank','about:blank');},100);<\/script></body></html>`);
     win.document.close();
   }
 }
 
-// Apply cloak to current tab
 function setCloak() {
   const name = document.getElementById('cloakInput').value || 'about:blank';
   document.title = name;
-  
-  // Change favicon to blank
   const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-  link.type = 'image/x-icon';
-  link.rel = 'shortcut icon';
-  link.href = 'data:image/x-icon;base64,';
+  link.type = 'image/x-icon'; link.rel = 'shortcut icon'; link.href = 'data:image/x-icon;base64,';
   document.getElementsByTagName('head')[0].appendChild(link);
-  
-  // Push history state to hide URL
   history.pushState({}, name, 'about:blank');
 }
 
-function closeVote() {
-  document.getElementById('votePopup').style.display = 'none';
-}
+function closeVote() { document.getElementById('votePopup').style.display = 'none'; }
 </script>
 
 </body>
