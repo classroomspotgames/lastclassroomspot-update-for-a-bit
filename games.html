@@ -5,340 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClassroomSpot</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
+.nav{padding:20px;background:#111;display:flex;align-items:center}
+.logo{font-size:24px;font-weight:bold;color:#e50914}
+.topbar{padding:15px 30px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222}
+#search{padding:8px 15px;border-radius:20px;border:none;background:#222;color:white;width:200px}
+.games-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+ gap:30px;
+ padding:30px;
 }
-
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #0d1117;
-    color: white;
-    overflow-x: hidden;
-    min-height: 100vh;
+.game-card{
+ width:120px;
+ height:120px;
+ border-radius:50%;
+ background-size:cover;
+ background-position:center;
+ display:flex;
+ align-items:flex-end;
+ justify-content:center;
+ cursor:pointer;
+ transition:transform .15s ease, box-shadow .15s ease;
+ box-shadow:0 0 15px rgba(0,0,0,.6);
 }
-
-/* Animated background */
-.bg-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    background: 
-        radial-gradient(ellipse at 20% 20%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
-    background-color: #0d1117;
-    animation: bgPulse 8s ease-in-out infinite;
+.game-card:hover{transform:scale(1.08)}
+.game-name{
+ background:rgba(0,0,0,.6);
+ width:100%;
+ text-align:center;
+ font-size:13px;
+ padding:6px 0;
+ border-radius:0 0 50% 50%;
 }
-
-@keyframes bgPulse {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 1; }
-}
-
-/* Floating particles */
-.particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: -1;
-}
-
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    animation: float 15s infinite;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(100vh) rotate(0deg);
-        opacity: 0;
-    }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% {
-        transform: translateY(-100vh) rotate(720deg);
-        opacity: 0;
-    }
-}
-
-/* Glassmorphism Nav */
-.nav {
-    padding: 20px 40px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.logo {
-    font-size: 28px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #e50914 0%, #ff6b6b 50%, #e50914 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: 2px;
-    animation: logoGlow 3s ease-in-out infinite;
-}
-
-@keyframes logoGlow {
-    0%, 100% { filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.5)); }
-    50% { filter: drop-shadow(0 0 20px rgba(229, 9, 20, 0.8)); }
-}
-
-/* Glassmorphism Topbar */
-.topbar {
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(5px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-#total {
-    font-size: 16px;
-    color: #8b949e;
-    font-weight: 500;
-}
-
-#search {
-    padding: 12px 24px;
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-    width: 280px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    outline: none;
-}
-
-#search:focus {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(102, 126, 234, 0.5);
-    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-}
-
-#search::placeholder {
-    color: #6e7681;
-}
-
-/* Games Grid */
-.games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 40px;
-    padding: 40px;
-    max-width: 1600px;
-    margin: 0 auto;
-}
-
-/* 3D Game Card */
-.game-card {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 20px;
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.game-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.6s;
-    z-index: 2;
-}
-
-.game-card:hover::before {
-    left: 100%;
-}
-
-/* Glow border */
-.glow-border {
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff, #ff00cc);
-    background-size: 400% 400%;
-    border-radius: 22px;
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.3s ease;
-    animation: gradient-rotate 3s ease infinite;
-}
-
-.game-card:hover .glow-border {
-    opacity: 1;
-}
-
-@keyframes gradient-rotate {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.game-card:hover {
-    transform: translateY(-10px) scale(1.05) rotateX(5deg);
-    box-shadow: 
-        0 25px 50px rgba(0, 0, 0, 0.5),
-        0 0 30px rgba(120, 119, 198, 0.3);
-    border-color: rgba(120, 119, 198, 0.5);
-}
-
-.game-card:active {
-    transform: translateY(-5px) scale(0.98);
-}
-
-/* Image overlay */
-.image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, rgba(13, 17, 23, 0.9) 0%, transparent 60%);
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-}
-
-.game-card:hover .image-overlay {
-    opacity: 1;
-}
-
-/* Game Name - No blue hover */
-.game-name {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    text-align: center;
-    font-size: 14px;
-    padding: 12px 8px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    transform: translateY(0);
-    transition: all 0.3s ease;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.game-card:hover .game-name {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 15px 8px;
-}
-
-/* Close Button */
-.close-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-    background: linear-gradient(135deg, #e50914 0%, #ff4757 100%);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    font-family: Arial, sans-serif;
-}
-
-.close-btn:hover {
-    transform: scale(1.1) rotate(90deg);
-    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.6);
-}
-
-.close-btn:active {
-    transform: scale(0.95);
-}
-
-/* Loading animation */
-@keyframes cardEnter {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.game-card {
-    animation: cardEnter 0.6s ease-out backwards;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .games-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 25px;
-        padding: 25px;
-    }
-    
-    .nav, .topbar {
-        padding: 15px 20px;
-    }
-    
-    #search {
-        width: 180px;
-    }
-    
-    .logo {
-        font-size: 22px;
-    }
-}
+.close-btn{position:fixed;top:10px;right:10px;z-index:9999;background:#e50914;color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;}
 </style>
 </head>
 <body>
-
-<!-- Animated Background -->
-<div class="bg-animation"></div>
-<div class="particles" id="particles"></div>
 
 <button onclick="closeWindow()" class="close-btn">✕</button>
 
@@ -358,29 +61,13 @@ const gamesEl = document.getElementById("games");
 const search = document.getElementById("search");
 const totalEl = document.getElementById("total");
 
-const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json";
-const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/";
-const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
+const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json ";
+const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/ ";
+const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/ ";
 
 let games = [];
-const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
-const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3";
-
-// Create floating particles
-function createParticles() {
-    const container = document.getElementById('particles');
-    const particleCount = 50;
-    
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-        particle.style.animationDelay = Math.random() * 5 + 's';
-        particle.style.opacity = Math.random() * 0.5 + 0.1;
-        container.appendChild(particle);
-    }
-}
+const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3 ";
+const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3 ";
 
 // Safe window handling
 const isInIframe = window !== window.parent;
@@ -404,75 +91,28 @@ function addRoblox(){
     const card = document.createElement("div");
     card.className = "game-card";
     card.style.backgroundImage = "url(" + ROBLOX_IMAGE + ")";
-    card.style.animationDelay = "0.1s";
-    
-    const glow = document.createElement("div");
-    glow.className = "glow-border";
-    card.appendChild(glow);
-    
-    const overlay = document.createElement("div");
-    overlay.className = "image-overlay";
-    card.appendChild(overlay);
-    
     const label = document.createElement("div");
     label.className = "game-name";
     label.textContent = "Roblox";
     card.appendChild(label);
-    
-    card.onclick = () => safeOpenWindow("https://nowgg.fun", "Roblox");
+    card.onclick = () => safeOpenWindow("https://nowgg.fun ", "Roblox");
     gamesEl.appendChild(card);
-    
-    // Add 3D tilt effect
-    addTiltEffect(card);
 }
 
 function addGTAViceCity(){
     const card = document.createElement("div");
     card.className = "game-card";
     card.style.backgroundImage = "url(" + GTA_IMAGE + ")";
-    card.style.animationDelay = "0.2s";
-    
-    const glow = document.createElement("div");
-    glow.className = "glow-border";
-    card.appendChild(glow);
-    
-    const overlay = document.createElement("div");
-    overlay.className = "image-overlay";
-    card.appendChild(overlay);
-    
     const label = document.createElement("div");
     label.className = "game-name";
     label.textContent = "GTA Vice City";
     card.appendChild(label);
     
+    // Fixed: Direct link to your Google Sites URL in new tab
     card.onclick = () => {
-        window.open("https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", "_blank");
+        window.open("https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1 ", "_blank");
     };
     gamesEl.appendChild(card);
-    
-    // Add 3D tilt effect
-    addTiltEffect(card);
-}
-
-// 3D tilt effect function
-function addTiltEffect(card) {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = (y - centerY) / 8;
-        const rotateY = (centerX - x) / 8;
-        
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.05)`;
-    });
-    
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
-    });
 }
 
 fetch(ZONES + "?t=" + Date.now())
@@ -494,32 +134,17 @@ function render(list){
     gamesEl.innerHTML = "";
     addRoblox();
     addGTAViceCity();
-    list.forEach((g, index) => {
+    list.forEach(g => {
         const card = document.createElement("div");
         card.className = "game-card";
-        card.style.animationDelay = (index + 3) * 0.05 + "s";
-        
-        const glow = document.createElement("div");
-        glow.className = "glow-border";
-        card.appendChild(glow);
-        
         const coverUrl = g.cover ? g.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML) : '';
         card.style.backgroundImage = "url(" + coverUrl + ")";
-        
-        const overlay = document.createElement("div");
-        overlay.className = "image-overlay";
-        card.appendChild(overlay);
-        
         const label = document.createElement("div");
         label.className = "game-name";
         label.textContent = g.name;
         card.appendChild(label);
-        
         card.onclick = () => openGame(g);
         gamesEl.appendChild(card);
-        
-        // Add 3D tilt effect
-        addTiltEffect(card);
     });
 }
 
@@ -539,9 +164,6 @@ function openGame(g){
         })
         .catch(err => win.document.write('<h1>Error loading game</h1>'));
 }
-
-// Initialize particles on load
-window.addEventListener('load', createParticles);
 </script>
 
 </body>
