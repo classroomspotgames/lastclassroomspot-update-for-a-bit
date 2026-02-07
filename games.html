@@ -5,40 +5,129 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClassroomSpot</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
-.nav{padding:20px;background:#111;display:flex;align-items:center}
-.logo{font-size:24px;font-weight:bold;color:#e50914}
-.topbar{padding:15px 30px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222}
-#search{padding:8px 15px;border-radius:20px;border:none;background:#222;color:white;width:200px}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:url('https://i.pinimg.com/736x/8e/d9/33/8ed93366a95da86f13ae3e50582944f3.jpg') center/cover fixed;
+    color:white;
+    min-height:100vh;
+}
+.nav{
+    padding:20px;
+    background:rgba(17,17,17,0.9);
+    display:flex;
+    align-items:center;
+    backdrop-filter:blur(10px);
+}
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:#e50914;
+}
+.topbar{
+    padding:15px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(34,34,34,0.8);
+    background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(5px);
+}
+#search{
+    padding:8px 15px;
+    border-radius:20px;
+    border:none;
+    background:rgba(34,34,34,0.9);
+    color:white;
+    width:200px;
+}
 .games-grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
- gap:30px;
- padding:30px;
+    display:grid;
+    grid-template-columns:repeat(6, 1fr);
+    gap:25px;
+    padding:30px;
+    max-width:1400px;
+    margin:0 auto;
+}
+@media (max-width: 1200px) {
+    .games-grid{grid-template-columns:repeat(4, 1fr);}
+}
+@media (max-width: 900px) {
+    .games-grid{grid-template-columns:repeat(3, 1fr);}
+}
+@media (max-width: 600px) {
+    .games-grid{grid-template-columns:repeat(2, 1fr);}
 }
 .game-card{
- width:120px;
- height:120px;
- border-radius:50%;
- background-size:cover;
- background-position:center;
- display:flex;
- align-items:flex-end;
- justify-content:center;
- cursor:pointer;
- transition:transform .15s ease, box-shadow .15s ease;
- box-shadow:0 0 15px rgba(0,0,0,.6);
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:12px;
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    justify-content:space-between;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+    box-shadow:0 4px 15px rgba(0,0,0,.6);
+    position:relative;
+    overflow:hidden;
+    border:2px solid rgba(255,255,255,0.1);
 }
-.game-card:hover{transform:scale(1.08)}
+.game-card:hover{
+    transform:scale(1.05);
+    box-shadow:0 8px 25px rgba(0,0,0,.8);
+    border-color:rgba(229,9,20,0.5);
+}
 .game-name{
- background:rgba(0,0,0,.6);
- width:100%;
- text-align:center;
- font-size:13px;
- padding:6px 0;
- border-radius:0 0 50% 50%;
+    background:rgba(0,0,0,.85);
+    width:100%;
+    text-align:center;
+    font-size:13px;
+    padding:8px 0;
+    font-weight:bold;
 }
-.close-btn{position:fixed;top:10px;right:10px;z-index:9999;background:#e50914;color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;}
+.fullscreen-btn{
+    background:#00ff00;
+    color:#000;
+    border:none;
+    border-radius:50%;
+    width:32px;
+    height:32px;
+    font-size:14px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:8px;
+    z-index:10;
+    transition:all 0.2s ease;
+    box-shadow:0 2px 8px rgba(0,255,0,0.4);
+}
+.fullscreen-btn:hover{
+    transform:scale(1.1);
+    box-shadow:0 4px 12px rgba(0,255,0,0.6);
+}
+.close-btn{
+    position:fixed;
+    top:10px;
+    right:10px;
+    z-index:9999;
+    background:#e50914;
+    color:white;
+    border:none;
+    border-radius:50%;
+    width:40px;
+    height:40px;
+    font-size:20px;
+    cursor:pointer;
+    box-shadow:0 2px 10px rgba(0,0,0,0.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:Arial,sans-serif;
+}
 
 /* Preview Overlay Styles */
 .preview-overlay{
@@ -99,6 +188,13 @@ body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
     font-size:24px;
     display:none;
 }
+.no-results{
+    text-align:center;
+    padding:50px;
+    font-size:18px;
+    color:#888;
+    grid-column:1/-1;
+}
 </style>
 </head>
 <body>
@@ -111,7 +207,7 @@ body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
         <span class="preview-title" id="previewTitle">Game Preview</span>
         <button class="preview-close" onclick="closePreview()">✕</button>
     </div>
-    <div class="preview-content">
+    <div class="preview-content" id="previewContent">
         <div class="preview-loader" id="previewLoader">Loading...</div>
         <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-fullscreen"></iframe>
     </div>
@@ -136,14 +232,23 @@ const previewOverlay = document.getElementById("previewOverlay");
 const previewFrame = document.getElementById("previewFrame");
 const previewTitle = document.getElementById("previewTitle");
 const previewLoader = document.getElementById("previewLoader");
+const previewContent = document.getElementById("previewContent");
 
 const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json";
 const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/";
 const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
 
 let games = [];
-const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
-const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3";
+let isFullscreen = false;
+
+// Game images
+const GAME_IMAGES = {
+    roblox: "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
+    gta: "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3",
+    sonic: "https://www.bing.com/th/id/OIP.oIxKByEEPvxJynlJ-lejUwHaD4?w=258&h=211&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
+    leveldevil: "https://www.bing.com/th/id/OIP.I0DJIM69u3fkaj32V4IX8QAAAA?w=206&h=211&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
+    subwaysurfers: "https://th.bing.com/th/id/OIP.kHOQ3zf6vvyOAUXDY4wWNwHaHa?w=160&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
+};
 
 // Safe window handling
 const isInIframe = window !== window.parent;
@@ -163,8 +268,38 @@ const closeWindow = () => {
     }
 };
 
+// Fullscreen functions
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        previewContent.requestFullscreen().then(() => {
+            isFullscreen = true;
+            document.querySelector('.preview-header').style.display = 'none';
+            previewContent.style.height = '100vh';
+        }).catch(err => {
+            console.log('Fullscreen error:', err);
+        });
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+function exitFullscreen() {
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    }
+}
+
+// Listen for fullscreen changes
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
+        isFullscreen = false;
+        document.querySelector('.preview-header').style.display = 'flex';
+        previewContent.style.height = 'calc(100% - 50px)';
+    }
+});
+
 // Preview functions
-function openPreview(htmlContent, title) {
+function openPreview(htmlContent, title, isGame = false) {
     previewTitle.textContent = title || "Game Preview";
     previewOverlay.classList.add('active');
     previewLoader.style.display = 'block';
@@ -172,6 +307,9 @@ function openPreview(htmlContent, title) {
     
     // Write the HTML content directly to the iframe
     previewFrame.srcdoc = htmlContent;
+    
+    // Store if this is a game for fullscreen purposes
+    previewOverlay.dataset.isGame = isGame;
     
     previewFrame.onload = function() {
         previewLoader.style.display = 'none';
@@ -188,16 +326,23 @@ function openPreview(htmlContent, title) {
 function closePreview() {
     previewOverlay.classList.remove('active');
     previewFrame.srcdoc = '';
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    }
 }
 
 // Close on escape key
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && previewOverlay.classList.contains('active')) {
-        closePreview();
+    if (e.key === 'Escape') {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else if (previewOverlay.classList.contains('active')) {
+            closePreview();
+        }
     }
 });
 
-// Roblox HTML content embedded directly
+// Roblox HTML content
 const ROBLOX_HTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -240,82 +385,309 @@ iframe {
 </body>
 </html>`;
 
-function addRoblox(){
+// Sonic HTML content
+const SONIC_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sonic - Truffled</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+iframe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+}
+#truffled-logo {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    z-index: 9999;
+}
+</style>
+</head>
+<body>
+<iframe src="https://classlink.com.de/games/sonic/index.html" allowfullscreen></iframe>
+<a href="https://classlink.com.de" target="_blank">
+    <img id="truffled-logo" src="https://classlink.com.de/png/logo.png" alt="Logo">
+</a>
+</body>
+</html>`;
+
+// Level Devil HTML content
+const LEVELDEVIL_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>lvldevil - Truffled</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+iframe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+}
+#truffled-logo {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    z-index: 9999;
+}
+</style>
+</head>
+<body>
+<iframe src="https://classlink.com.de/games/lvldevil/index.html" allowfullscreen></iframe>
+<a href="https://classlink.com.de" target="_blank">
+    <img id="truffled-logo" src="https://classlink.com.de/png/logo.png" alt="Logo">
+</a>
+</body>
+</html>`;
+
+// Subway Surfers HTML content
+const SUBWAYSURFERS_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>subway-surfers - Truffled</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+iframe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+}
+#truffled-logo {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    z-index: 9999;
+}
+</style>
+</head>
+<body>
+<iframe src="https://classlink.com.de/games/subway-surfers/index.html" allowfullscreen></iframe>
+<a href="https://classlink.com.de" target="_blank">
+    <img id="truffled-logo" src="https://classlink.com.de/png/logo.png" alt="Logo">
+</a>
+</body>
+</html>`;
+
+function createGameCard(name, imageUrl, onClick, isGame = true) {
     const card = document.createElement("div");
     card.className = "game-card";
-    card.style.backgroundImage = "url(" + ROBLOX_IMAGE + ")";
+    card.style.backgroundImage = "url(" + imageUrl + ")";
+    
+    // Fullscreen button (only for games)
+    if (isGame) {
+        const fsBtn = document.createElement("button");
+        fsBtn.className = "fullscreen-btn";
+        fsBtn.innerHTML = "⛶";
+        fsBtn.title = "Fullscreen";
+        fsBtn.onclick = (e) => {
+            e.stopPropagation();
+            onClick();
+            setTimeout(toggleFullscreen, 100);
+        };
+        card.appendChild(fsBtn);
+    }
+    
     const label = document.createElement("div");
     label.className = "game-name";
-    label.textContent = "Roblox";
+    label.textContent = name;
     card.appendChild(label);
-    // Opens embedded HTML in preview
-    card.onclick = () => openPreview(ROBLOX_HTML, "Roblox");
+    
+    card.onclick = () => onClick();
+    return card;
+}
+
+function addRoblox(){
+    const card = createGameCard("Roblox", GAME_IMAGES.roblox, () => openPreview(ROBLOX_HTML, "Roblox", true));
     gamesEl.appendChild(card);
 }
 
 function addGTAViceCity(){
-    const card = document.createElement("div");
-    card.className = "game-card";
-    card.style.backgroundImage = "url(" + GTA_IMAGE + ")";
-    const label = document.createElement("div");
-    label.className = "game-name";
-    label.textContent = "GTA Vice City";
-    card.appendChild(label);
-    
-    card.onclick = () => {
+    const card = createGameCard("GTA Vice City", GAME_IMAGES.gta, () => {
         window.open("https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", "_blank");
-    };
+    }, false);
     gamesEl.appendChild(card);
 }
+
+function addSonic(){
+    const card = createGameCard("Sonic", GAME_IMAGES.sonic, () => openPreview(SONIC_HTML, "Sonic", true));
+    gamesEl.appendChild(card);
+}
+
+function addLevelDevil(){
+    const card = createGameCard("Level Devil", GAME_IMAGES.leveldevil, () => openPreview(LEVELDEVIL_HTML, "Level Devil", true));
+    gamesEl.appendChild(card);
+}
+
+function addSubwaySurfers(){
+    const card = createGameCard("Subway Surfers", GAME_IMAGES.subwaysurfers, () => openPreview(SUBWAYSURFERS_HTML, "Subway Surfers", true));
+    gamesEl.appendChild(card);
+}
+
+// Custom games list (not from API)
+const customGames = [
+    {name: "Roblox", add: addRoblox},
+    {name: "GTA Vice City", add: addGTAViceCity},
+    {name: "Sonic", add: addSonic},
+    {name: "Level Devil", add: addLevelDevil},
+    {name: "Subway Surfers", add: addSubwaySurfers}
+];
 
 fetch(ZONES + "?t=" + Date.now())
     .then(r => r.ok ? r.json() : Promise.reject('Network error'))
     .then(data => {
         games = data.filter(g => !g.name.toLowerCase().includes("suggest"));
-        totalEl.textContent = "Total games: " + (games.length + 2);
+        totalEl.textContent = "Total games: " + (games.length + customGames.length);
         render(games);
     })
     .catch(err => {
         console.error('Error:', err);
-        totalEl.textContent = "Total games: 2 (offline)";
+        totalEl.textContent = "Total games: " + customGames.length + " (offline)";
         gamesEl.innerHTML = "";
-        addRoblox();
-        addGTAViceCity();
+        customGames.forEach(g => g.add());
     });
 
 function render(list){
     gamesEl.innerHTML = "";
-    addRoblox();
-    addGTAViceCity();
+    
+    // Add custom games first
+    customGames.forEach(g => g.add());
+    
+    // Add API games
     list.forEach(g => {
         const card = document.createElement("div");
         card.className = "game-card";
         const coverUrl = g.cover ? g.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML) : '';
         card.style.backgroundImage = "url(" + coverUrl + ")";
+        
+        // Fullscreen button for API games
+        const fsBtn = document.createElement("button");
+        fsBtn.className = "fullscreen-btn";
+        fsBtn.innerHTML = "⛶";
+        fsBtn.title = "Fullscreen";
+        fsBtn.onclick = (e) => {
+            e.stopPropagation();
+            openGame(g, true);
+        };
+        card.appendChild(fsBtn);
+        
         const label = document.createElement("div");
         label.className = "game-name";
         label.textContent = g.name;
         card.appendChild(label);
-        card.onclick = () => openGame(g);
+        
+        card.onclick = () => openGame(g, false);
         gamesEl.appendChild(card);
     });
 }
 
 search.oninput = () => {
     const q = search.value.toLowerCase();
-    render(games.filter(g => g.name.toLowerCase().includes(q)));
+    
+    // Filter custom games
+    const filteredCustom = customGames.filter(g => g.name.toLowerCase().includes(q));
+    
+    // Filter API games
+    const filteredApi = games.filter(g => g.name.toLowerCase().includes(q));
+    
+    gamesEl.innerHTML = "";
+    
+    // Show filtered custom games
+    filteredCustom.forEach(g => g.add());
+    
+    // Show filtered API games
+    filteredApi.forEach(g => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+        const coverUrl = g.cover ? g.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML) : '';
+        card.style.backgroundImage = "url(" + coverUrl + ")";
+        
+        const fsBtn = document.createElement("button");
+        fsBtn.className = "fullscreen-btn";
+        fsBtn.innerHTML = "⛶";
+        fsBtn.title = "Fullscreen";
+        fsBtn.onclick = (e) => {
+            e.stopPropagation();
+            openGame(g, true);
+        };
+        card.appendChild(fsBtn);
+        
+        const label = document.createElement("div");
+        label.className = "game-name";
+        label.textContent = g.name;
+        card.appendChild(label);
+        
+        card.onclick = () => openGame(g, false);
+        gamesEl.appendChild(card);
+    });
+    
+    // Show no results message if empty
+    if (filteredCustom.length === 0 && filteredApi.length === 0) {
+        const noResults = document.createElement("div");
+        noResults.className = "no-results";
+        noResults.textContent = "No games found matching \"" + q + "\"";
+        gamesEl.appendChild(noResults);
+    }
 };
 
-function openGame(g){
-    const win = window.open("about:blank", "_blank");
+function openGame(g, autoFullscreen = false){
     fetch(g.url.replace("{HTML_URL}", HTML))
         .then(r => r.text())
         .then(t => {
-            win.document.open();
-            win.document.write(t);
-            win.document.close();
+            openPreview(t, g.name, true);
+            if (autoFullscreen) {
+                setTimeout(toggleFullscreen, 500);
+            }
         })
-        .catch(err => win.document.write('<h1>Error loading game</h1>'));
+        .catch(err => {
+            const win = window.open("about:blank", "_blank");
+            win.document.write('<h1>Error loading game</h1>');
+        });
 }
 </script>
 
