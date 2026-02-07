@@ -60,6 +60,8 @@ body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
     justify-content:space-between;
     align-items:center;
     border-bottom:1px solid #222;
+    height:50px;
+    box-sizing:border-box;
 }
 .preview-title{font-size:18px;font-weight:bold;color:#e50914}
 .preview-close{
@@ -75,9 +77,16 @@ body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
     align-items:center;
     justify-content:center;
 }
-.preview-frame{
+.preview-content{
     flex:1;
+    position:relative;
     width:100%;
+    height:calc(100% - 50px);
+    overflow:hidden;
+}
+.preview-frame{
+    width:100%;
+    height:100%;
     border:none;
     background:#000;
 }
@@ -102,8 +111,10 @@ body{margin:0;font-family:Arial,sans-serif;background:#000;color:white}
         <span class="preview-title" id="previewTitle">Game Preview</span>
         <button class="preview-close" onclick="closePreview()">✕</button>
     </div>
-    <div class="preview-loader" id="previewLoader">Loading...</div>
-    <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
+    <div class="preview-content">
+        <div class="preview-loader" id="previewLoader">Loading...</div>
+        <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-fullscreen"></iframe>
+    </div>
 </div>
 
 <nav class="nav">
@@ -153,25 +164,30 @@ const closeWindow = () => {
 };
 
 // Preview functions
-function openPreview(url, title) {
+function openPreview(htmlContent, title) {
     previewTitle.textContent = title || "Game Preview";
     previewOverlay.classList.add('active');
     previewLoader.style.display = 'block';
     previewFrame.style.opacity = '0';
     
-    // Decode the URL if it's encoded
-    const decodedUrl = decodeURIComponent(url);
-    previewFrame.src = decodedUrl;
+    // Write the HTML content directly to the iframe
+    previewFrame.srcdoc = htmlContent;
     
     previewFrame.onload = function() {
         previewLoader.style.display = 'none';
         previewFrame.style.opacity = '1';
     };
+    
+    // Fallback if onload doesn't fire
+    setTimeout(() => {
+        previewLoader.style.display = 'none';
+        previewFrame.style.opacity = '1';
+    }, 1000);
 }
 
 function closePreview() {
     previewOverlay.classList.remove('active');
-    previewFrame.src = 'about:blank';
+    previewFrame.srcdoc = '';
 }
 
 // Close on escape key
@@ -181,6 +197,49 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// Roblox HTML content embedded directly
+const ROBLOX_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>roblox - Truffled</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+iframe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+}
+#truffled-logo {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    z-index: 9999;
+}
+</style>
+</head>
+<body>
+<iframe src="https://nevertraveling.thepresenttraveller.com/gamefile/nowgg/roblox.html?prefix=149" allowfullscreen></iframe>
+<a href="https://nevertraveling.thepresenttraveller.com" target="_blank">
+    <img id="truffled-logo" src="https://nevertraveling.thepresenttraveller.com/png/logo.png" alt="Logo">
+</a>
+</body>
+</html>`;
+
 function addRoblox(){
     const card = document.createElement("div");
     card.className = "game-card";
@@ -189,8 +248,8 @@ function addRoblox(){
     label.className = "game-name";
     label.textContent = "Roblox";
     card.appendChild(label);
-    // Now opens in preview instead of new window
-    card.onclick = () => openPreview("https://sainttech.techmaxasia.com/pages/loader/?zone=eyJpZCI6InJvYmxveCIsInR5cGUiOiJwLXV2IiwidGl0bGUiOiJSb2Jsb3giLCJzcmMiOiJodHRwczovL1tbaXBdXS5pcC5ub3dnZy5mdW4vYXBwcy9hLzE5MDAwL2IuaHRtbCJ9", "Roblox");
+    // Opens embedded HTML in preview
+    card.onclick = () => openPreview(ROBLOX_HTML, "Roblox");
     gamesEl.appendChild(card);
 }
 
