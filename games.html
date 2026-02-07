@@ -61,13 +61,13 @@ const gamesEl = document.getElementById("games");
 const search = document.getElementById("search");
 const totalEl = document.getElementById("total");
 
-const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json ";
-const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/ ";
-const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/ ";
+const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json";
+const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/";
+const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
 
 let games = [];
-const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3 ";
-const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3 ";
+const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
+const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3";
 
 // Safe window handling
 const isInIframe = window !== window.parent;
@@ -95,7 +95,7 @@ function addRoblox(){
     label.className = "game-name";
     label.textContent = "Roblox";
     card.appendChild(label);
-    card.onclick = () => safeOpenWindow("https://nowgg.fun ", "Roblox");
+    card.onclick = () => safeOpenWindow("https://nowgg.fun", "Roblox");
     gamesEl.appendChild(card);
 }
 
@@ -110,7 +110,7 @@ function addGTAViceCity(){
     
     // Fixed: Direct link to your Google Sites URL in new tab
     card.onclick = () => {
-        window.open("https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1 ", "_blank");
+        window.open("https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", "_blank");
     };
     gamesEl.appendChild(card);
 }
