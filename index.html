@@ -5,180 +5,555 @@
 <title>about:blank</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="favicon.ico">
-<link rel="stylesheet" href="launcher.css">
-
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #1a1a1a;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Dynamic Wallpaper Background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -2;
+  transition: background-image 0.5s ease;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* VOTE POPUP */
 #votePopup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  backdrop-filter: blur(10px);
 }
 
 #voteBox {
-  background: #111;
+  background: linear-gradient(135deg, #e60012 0%, #b3000e 100%);
   color: white;
-  padding: 24px;
-  border-radius: 12px;
-  max-width: 320px;
+  padding: 32px;
+  border-radius: 24px;
+  max-width: 360px;
   text-align: center;
-  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,255,255,0.1);
 }
 
-#voteBox h2 { margin-top: 0; }
-#voteBox button { margin: 8px; padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
-#voteBtn { background: #e50914; color: white; }
-#closeVote { background: #444; color: white; }
-
-/* Home Screen Apps Grid - TOP LEFT POSITION */
-.home-apps {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  z-index: 1;
+#voteBox h2 { 
+  margin-top: 0; 
+  font-size: 24px;
+  margin-bottom: 16px;
 }
 
-.home-app-item {
+#voteBox p {
+  margin-bottom: 24px;
+  font-size: 15px;
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+#voteBox button { 
+  margin: 8px; 
+  padding: 12px 24px; 
+  border: none; 
+  border-radius: 12px; 
+  cursor: pointer; 
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+#voteBtn { 
+  background: white; 
+  color: #e60012; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+#voteBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+#closeVote { 
+  background: rgba(255,255,255,0.2); 
+  color: white; 
+}
+#closeVote:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* Main Container */
+.main-container {
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  padding: 40px 60px 140px 60px;
+  position: relative;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
-  padding: 20px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 2px solid transparent;
-  backdrop-filter: blur(10px);
-  min-width: 100px;
+  margin-bottom: 30px;
 }
 
-.home-app-item:hover { 
-  background: rgba(255,255,255,0.2); 
-  transform: translateY(-5px); 
-  border-color: rgba(255,255,255,0.3); 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.home-app-item img { 
-  width: 64px; 
-  height: 64px; 
-  border-radius: 16px; 
-  margin-bottom: 10px; 
-  object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.home-app-item span { 
-  color: white; 
-  font-size: 14px; 
-  text-align: center;
+.time-display {
+  color: white;
+  font-size: 18px;
   font-weight: 500;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-/* Dock buttons */
-.dock {
+/* Games Grid - Nintendo Switch Style - 5 per row */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+  flex: 1;
+  align-content: start;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.game-card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 3px solid transparent;
+}
+
+.game-card:hover, .game-card.focused {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.game-card.focused {
+  border-color: #e60012;
+  box-shadow: 0 0 0 4px rgba(230, 0, 18, 0.3), 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.game-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.game-card:hover img, .game-card.focused img {
+  transform: scale(1.05);
+}
+
+.game-card .star {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  color: #ffd700;
+  font-size: 20px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  z-index: 2;
+}
+
+.game-card .title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.game-card:hover .title, .game-card.focused .title {
+  opacity: 1;
+}
+
+/* Nintendo Switch Style Dock */
+.dock-container {
   position: fixed;
-  bottom: 20px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 8px;
+  gap: 16px;
+  padding: 16px 24px;
+  background: rgba(30, 30, 30, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
   z-index: 100;
 }
 
-.dock button {
-  margin: 4px; padding: 8px 16px; background: rgba(255,255,255,0.1);
-  border: none; border-radius: 8px; color: white; cursor: pointer;
-  font-size: 14px; transition: all 0.2s;
-  backdrop-filter: blur(10px);
+.dock-item {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid transparent;
+  position: relative;
 }
-.dock button:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
-/* Settings buttons */
-#settings button {
-  margin: 4px; padding: 8px 12px; background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2); border-radius: 6px;
-  color: white; cursor: pointer; font-size: 13px; transition: all 0.2s;
+.dock-item:hover {
+  transform: translateY(-8px);
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.3);
 }
-#settings button:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
-#settings h3 { color: white; margin-top: 16px; margin-bottom: 8px; font-size: 16px; }
+
+.dock-item svg {
+  width: 28px;
+  height: 28px;
+  fill: white;
+}
+
+.dock-item.active {
+  background: #e60012;
+}
+
+/* Specific dock item colors */
+.dock-item.apps-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+}
+
+.dock-item.apps-btn:hover {
+  background: linear-gradient(135deg, #ff8585 0%, #f07040 100%);
+}
 
 /* Window styling */
 .window {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 80%; height: 80%; background: #111; border-radius: 12px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.8); z-index: 1000;
-  display: flex; flex-direction: column; overflow: hidden;
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
+  width: 85%; 
+  height: 85%; 
+  background: #1a1a1a; 
+  border-radius: 20px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.8); 
+  z-index: 1000;
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 .window.hidden { display: none; }
 .topbar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 15px; background: #222; border-bottom: 1px solid #333;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  padding: 16px 20px; 
+  background: rgba(255,255,255,0.05); 
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
 }
-.topbar span { color: white; font-weight: bold; }
-.topbar button { background: #e50914; border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-.topbar button:hover { background: #ff1a25; }
-#frame { flex: 1; width: 100%; border: none; background: white; }
+.topbar span { 
+  color: white; 
+  font-weight: 600;
+  font-size: 16px;
+}
+.topbar button { 
+  background: rgba(255,255,255,0.1); 
+  border: none; 
+  color: white; 
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.topbar button:hover { 
+  background: #e60012; 
+}
+#frame { 
+  flex: 1; 
+  width: 100%; 
+  border: none; 
+  background: white; 
+}
 
-/* Settings panel */
+/* Settings panel - Switch Style */
 .settings {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  background: #111; padding: 20px; border-radius: 12px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.8); z-index: 1001;
-  max-width: 400px; width: 90%;
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
+  background: rgba(30, 30, 30, 0.98); 
+  padding: 32px; 
+  border-radius: 24px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.8); 
+  z-index: 1001;
+  max-width: 500px; 
+  width: 90%;
+  border: 1px solid rgba(255,255,255,0.1);
+  max-height: 80vh;
+  overflow-y: auto;
 }
 .settings.hidden { display: none; }
 
-/* Apps Grid Panel */
+.settings h3 { 
+  color: white; 
+  margin-top: 24px; 
+  margin-bottom: 16px; 
+  font-size: 18px;
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e60012;
+}
+
+.settings h3:first-child {
+  margin-top: 0;
+}
+
+.settings button {
+  margin: 6px; 
+  padding: 10px 16px; 
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1); 
+  border-radius: 12px;
+  color: white; 
+  cursor: pointer; 
+  font-size: 13px; 
+  transition: all 0.2s;
+}
+.settings button:hover { 
+  background: #e60012; 
+  transform: translateY(-1px);
+  border-color: transparent;
+}
+
+.settings input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+}
+
+.settings input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+/* Apps Grid Panel - Switch Style */
 .apps-panel {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  background: #111; padding: 30px; border-radius: 16px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.9); z-index: 1002;
-  max-width: 700px; width: 90%; max-height: 80vh; overflow-y: auto;
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
+  background: rgba(30, 30, 30, 0.98); 
+  padding: 40px; 
+  border-radius: 24px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.9); 
+  z-index: 1002;
+  max-width: 800px; 
+  width: 90%; 
+  max-height: 80vh; 
+  overflow-y: auto;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 .apps-panel.hidden { display: none; }
-.apps-panel h2 { color: white; margin-top: 0; margin-bottom: 20px; text-align: center; }
-.apps-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px;
+.apps-panel h2 { 
+  color: white; 
+  margin-top: 0; 
+  margin-bottom: 24px; 
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+}
+.apps-grid-panel {
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+  gap: 20px;
 }
 .app-item {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 15px; background: rgba(255,255,255,0.05);
-  border-radius: 12px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  padding: 20px; 
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px; 
+  cursor: pointer; 
+  transition: all 0.2s; 
+  border: 2px solid transparent;
 }
-.app-item:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
-.app-item img { width: 48px; height: 48px; border-radius: 12px; margin-bottom: 8px; object-fit: cover; }
-.app-item span { color: white; font-size: 12px; text-align: center; }
+.app-item:hover { 
+  background: rgba(255,255,255,0.1); 
+  transform: translateY(-5px); 
+  border-color: rgba(255,255,255,0.2); 
+}
+.app-item img { 
+  width: 48px; 
+  height: 48px; 
+  border-radius: 12px; 
+  margin-bottom: 8px; 
+  object-fit: cover; 
+}
+.app-item span { 
+  color: white; 
+  font-size: 12px; 
+  text-align: center; 
+}
 .close-apps-btn {
-  margin-top: 20px; padding: 10px 20px; background: #e50914; color: white;
-  border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 14px;
+  margin-top: 24px; 
+  padding: 14px; 
+  background: #e60012; 
+  color: white;
+  border: none; 
+  border-radius: 12px; 
+  cursor: pointer; 
+  width: 100%; 
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.2s;
 }
-.close-apps-btn:hover { background: #ff1a25; }
+.close-apps-btn:hover { 
+  background: #ff1a2e;
+  transform: translateY(-2px);
+}
 
 /* GN Movies Window */
 .gn-movies-window {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 90%; height: 90%; background: #000; border-radius: 12px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.9); z-index: 1003;
-  display: flex; flex-direction: column; overflow: hidden;
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
+  width: 90%; 
+  height: 90%; 
+  background: #0a0a0a; 
+  border-radius: 20px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.9); 
+  z-index: 1003;
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 .gn-movies-window.hidden { display: none; }
-.gn-movies-content { flex: 1; width: 100%; border: none; background: #000; }
-.launch-button {
-  display: flex; align-items: center; justify-content: center;
-  width: 100%; height: 100%; background-color: #000000; color: #ffffff;
-  font-family: Arial, sans-serif; font-size: 24px; font-weight: bold;
-  cursor: pointer; text-decoration: none; transition: background-color 0.3s, transform 0.2s; border: none;
+.gn-movies-content { 
+  flex: 1; 
+  width: 100%; 
+  border: none; 
+  background: #0a0a0a; 
 }
-.launch-button:hover { background-color: #4a148c; }
+.launch-button {
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  width: 100%; 
+  height: 100%; 
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); 
+  color: #ffffff;
+  font-family: inherit; 
+  font-size: 28px; 
+  font-weight: 700;
+  cursor: pointer; 
+  text-decoration: none; 
+  transition: all 0.3s; 
+  border: none;
+  flex-direction: column;
+  gap: 20px;
+}
+.launch-button::before {
+  content: '▶';
+  font-size: 64px;
+  color: #e60012;
+  opacity: 0.8;
+  transition: transform 0.3s;
+}
+.launch-button:hover { 
+  background: linear-gradient(135deg, #2a0a3a 0%, #1a0a2a 100%); 
+}
+.launch-button:hover::before {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.5);
+}
+
+/* Keyboard hint */
+.keyboard-hint {
+  position: fixed;
+  bottom: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  background: rgba(0,0,0,0.5);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.keyboard-hint.show {
+  opacity: 1;
+}
 </style>
 </head>
 
@@ -188,70 +563,91 @@
 <div id="votePopup">
   <div id="voteBox">
     <h2>❤️ Support Us</h2>
-    <p>Do you love our site?<br>Please support us by voting on our site!</p>
-    <button id="voteBtn" onclick="window.open('https://ubghub.org/?site=classroomspot   ','_blank')">Vote</button>
+    <p>Do you love our site?<br>Please support us by voting!</p>
+    <button id="voteBtn" onclick="window.open('https://ubghub.org/?site=classroomspot','_blank')">Vote</button>
     <button id="closeVote" onclick="closeVote()">Exit</button>
   </div>
 </div>
 
-<!-- HOME SCREEN APPS - NOW TOP LEFT -->
-<div class="home-apps">
-  <div class="home-app-item" onclick="window.open('https://sites.google.com/view/ixlmathlanguageartssciencesoci/page  ', '_blank')">
-    <img src="https://tse2.mm.bing.net/th/id/OIP.aR60p_4-hu5-KUcDkL8rMQHaEK?rs=1&pid=ImgDetMain&o=7&rm=3  " alt="Cloud Gaming">
-    <span>Cloud Gaming</span>
+<div class="main-container">
+  <div class="header">
+    <div class="time-display" id="clock">12:00 PM</div>
   </div>
-  <div class="home-app-item" onclick="window.open('https://sites.google.com/view/ilovepibbles?usp=sharing', '_blank')">
-    <img src="https://th.bing.com/th/id/R.143a9f7d78bb7b7fc168301e646eea88?rik=sDTO0Q9d5sG6LA&pid=ImgRaw&r=0" alt="My Sister Website">
-    <span>My Sister Website</span>
+
+  <!-- Main Games Grid - 5 per row -->
+  <div class="games-grid" id="gamesGrid">
+    <!-- Games loaded dynamically -->
+  </div>
+</div>
+
+<!-- Keyboard Navigation Hint -->
+<div class="keyboard-hint" id="keyboardHint">Use A / D to navigate</div>
+
+<!-- Nintendo Switch Style Dock - No Games Button -->
+<div class="dock-container">
+  <div class="dock-item" onclick="openWindow('movies.html','Movies')" title="Movies">
+    <svg viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
+  </div>
+  <div class="dock-item" onclick="openWindow('partners.html','Partners')" title="Partners">
+    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+  </div>
+  <div class="dock-item" onclick="openWindow('unblockers.html','Unblocker')" title="Unblocker">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+  </div>
+  <div class="dock-item apps-btn" onclick="openApps()" title="All Apps">
+    <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+  </div>
+  <div class="dock-item" onclick="openSettings()" title="Settings">
+    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L5.09 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
   </div>
 </div>
 
 <!-- APPS PANEL -->
 <div id="appsPanel" class="apps-panel hidden">
-  <h2>📱 Apps</h2>
-  <div class="apps-grid">
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Discord   ', 'Discord')">
-      <img src="https://tse2.mm.bing.net/th/id/OIP.JxDw-5bFs4goAom52j2g5gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3   " alt="Discord">
+  <h2>📱 All Apps</h2>
+  <div class="apps-grid-panel">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Discord', 'Discord')">
+      <img src="https://tse2.mm.bing.net/th/id/OIP.JxDw-5bFs4goAom52j2g5gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Discord">
       <span>Discord</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Amazon%20Luna   ', 'Amazon Luna')">
-      <img src="https://tse4.mm.bing.net/th/id/OIP.tjzLkaddOhhyYu8kSFZawQAAAA?rs=1&pid=ImgDetMain&o=7&rm=3   " alt="Amazon Luna">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Amazon%20Luna', 'Amazon Luna')">
+      <img src="https://tse4.mm.bing.net/th/id/OIP.tjzLkaddOhhyYu8kSFZawQAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Amazon Luna">
       <span>Amazon Luna</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=TikTok   ', 'TikTok')">
-      <img src="https://tse3.mm.bing.net/th/id/OIP.K27Zig7nc-qgGAgSXxIzHQHaHv?rs=1&pid=ImgDetMain&o=7&rm=3   " alt="TikTok">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=TikTok', 'TikTok')">
+      <img src="https://tse3.mm.bing.net/th/id/OIP.K27Zig7nc-qgGAgSXxIzHQHaHv?rs=1&pid=ImgDetMain&o=7&rm=3" alt="TikTok">
       <span>TikTok</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Poki   ', 'Poki')">
-      <img src="https://poki.com/favicon.ico   " alt="Poki">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Poki', 'Poki')">
+      <img src="https://poki.com/favicon.ico" alt="Poki">
       <span>Poki</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Snapchat   ', 'Snapchat')">
-      <img src="https://tse1.mm.bing.net/th/id/OIP.SrWb9kN1ONDZkmQpPvPEeQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3   " alt="Snapchat">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Snapchat', 'Snapchat')">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.SrWb9kN1ONDZkmQpPvPEeQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Snapchat">
       <span>Snapchat</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitch   ', 'Twitch')">
-      <img src="https://tse2.mm.bing.net/th/id/OIP.A6d3GeTfIuEPNdnEKaX6OgHaHZ?rs=1&pid=ImgDetMain&o=7&rm=3   " alt="Twitch">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitch', 'Twitch')">
+      <img src="https://tse2.mm.bing.net/th/id/OIP.A6d3GeTfIuEPNdnEKaX6OgHaHZ?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Twitch">
       <span>Twitch</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitter%20X   ', 'Twitter X')">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg   " alt="Twitter X">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitter%20X', 'Twitter X')">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg" alt="Twitter X">
       <span>Twitter X</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=OpenAI   ', 'ChatGPT')">
-      <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png   " alt="ChatGPT">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=OpenAI', 'ChatGPT')">
+      <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png" alt="ChatGPT">
       <span>ChatGPT</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Geforce%20NOW   ', 'GeForce NOW')">
-      <img src="https://www.nvidia.com/favicon.ico   " alt="GeForce NOW">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Geforce%20NOW', 'GeForce NOW')">
+      <img src="https://www.nvidia.com/favicon.ico" alt="GeForce NOW">
       <span>GeForce NOW</span>
     </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Soundcloud   ', 'SoundCloud')">
-      <img src="https://th.bing.com/th/id/OIP.45nAc9ORAJayclyJBZVK-wHaHa?w=154&h=180&c=7&r=0&o=7&pid=1.7&rm=3   " alt="SoundCloud">
+    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Soundcloud', 'SoundCloud')">
+      <img src="https://th.bing.com/th/id/OIP.45nAc9ORAJayclyJBZVK-wHaHa?w=154&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="SoundCloud">
       <span>SoundCloud</span>
     </div>
     <div class="app-item" onclick="openGnMoviesWindow()">
-      <img src="https://cdn-icons-png.flaticon.com/512/44/44957.png   " alt="GN Movies" style="filter: invert(1);">
+      <img src="https://cdn-icons-png.flaticon.com/512/44/44957.png" alt="GN Movies" style="filter: invert(1);">
       <span>GN Movies</span>
     </div>
   </div>
@@ -269,15 +665,6 @@
   </div>
 </div>
 
-<div class="dock">
-  <button onclick="openWindow('games.html','Games')">Games</button>
-  <button onclick="openWindow('movies.html','Movies')">Movies</button>
-  <button onclick="openWindow('partners.html','Partners')">Partners</button>
-  <button onclick="openWindow('unblockers.html','Unblocker')">Unblocker</button>
-  <button onclick="openApps()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-weight: bold;">📦 Apps</button>
-  <button onclick="openSettings()">⚙</button>
-</div>
-
 <div id="window" class="window hidden">
   <div class="topbar">
     <span id="windowTitle">App</span>
@@ -287,7 +674,7 @@
 </div>
 
 <div id="settings" class="settings hidden">
-  <h3>Wallpapers</h3>
+  <h3>🎨 Wallpapers</h3>
   <button onclick="setWallpaper('goku')">Goku</button>
   <button onclick="setWallpaper('goku2')">Goku 2</button>
   <button onclick="setWallpaper('naruto')">Naruto</button>
@@ -302,74 +689,316 @@
   <button onclick="setWallpaper('dbz')">Dragon Ball Z</button>
   <button onclick="setWallpaper('tungtung')">Tung Tung Sahur</button>
 
-  <h3>Cloak</h3>
+  <h3>🎭 Cloak</h3>
   <button onclick="openAboutBlank()">Open about:blank</button>
   <input id="cloakInput" placeholder="Tab name">
   <button onclick="setCloak()">Apply Cloak</button>
   <br><br>
-  <button onclick="closeSettings()">Close</button>
+  <button onclick="closeSettings()">Close Settings</button>
 </div>
 
 <script>
 const wallpapers = {
-  'goku': 'https://wallpaperaccess.com/full/9802.jpg ',
-  'goku2': 'https://th.bing.com/th/id/R.45275f2e1774c1d0b1a9d1a2994e32ec?rik=X4g7q68hTKZNUA&riu=http%3a%2f%2fwallpapercave.com%2fwp%2fWhqqjsD.jpg&ehk=AY5R2%2bOgfgD2Uof%2f783mSiAXbuQgeWiZfYJuR31vKw%3d&risl=&pid=ImgRaw&r=0 ',
-  'naruto': 'https://tse1.mm.bing.net/th/id/OIP.S47sN1EnbmRlDgTD3coBiwHaDs?rs=1&pid=ImgDetMain&o=7&rm=3 ',
-  'surfer': 'https://th.bing.com/th/id/OIP.ApR_wuPX0MsWpSWi73xMpgHaEK?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3 ',
-  'surfer-gif': 'https://media.tenor.com/j1QA4Dpg4SIAAAAM/silver.gif ',
-  'surfer2': 'https://tse2.mm.bing.net/th/id/OIP.GYQW-TNWUuPL_tnhGv9D2QHaEK?rs=1&pid=ImgDetMain&o=7&rm=3 ',
-  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0   ',
-  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg   ',
-  'jjk': 'https://wallpapercave.com/wp/wp9745449.png   ',
-  'roblox': 'https://wallpaperaccess.com/full/196936.jpg   ',
-  'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg   ',
-  'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg   ',
-  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3   '
+  'goku': 'https://wallpaperaccess.com/full/9802.jpg',
+  'goku2': 'https://th.bing.com/th/id/R.45275f2e1774c1d0b1a9d1a2994e32ec?rik=X4g7q68hTKZNUA&riu=http%3a%2f%2fwallpapercave.com%2fwp%2fWhqqjsD.jpg&ehk=AY5R2%2bOgfgD2Uof%2f783mSiAXbuQgeWiZfYJuR31vKw%3d&risl=&pid=ImgRaw&r=0',
+  'naruto': 'https://tse1.mm.bing.net/th/id/OIP.S47sN1EnbmRlDgTD3coBiwHaDs?rs=1&pid=ImgDetMain&o=7&rm=3',
+  'surfer': 'https://th.bing.com/th/id/OIP.ApR_wuPX0MsWpSWi73xMpgHaEK?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3',
+  'surfer-gif': 'https://media.tenor.com/j1QA4Dpg4SIAAAAM/silver.gif',
+  'surfer2': 'https://tse2.mm.bing.net/th/id/OIP.GYQW-TNWUuPL_tnhGv9D2QHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
+  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0',
+  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg',
+  'jjk': 'https://wallpapercave.com/wp/wp9745449.png',
+  'roblox': 'https://wallpaperaccess.com/full/196936.jpg',
+  'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg',
+  'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg',
+  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3'
 };
 
+// Clock
+function updateClock() {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  document.getElementById('clock').textContent = timeString;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Games Data
+let games = [];
+let focusedIndex = 0;
+const gamesPerRow = 5;
+
+// Load games from API
+const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json";
+const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/";
+const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
+
+const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
+const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3";
+
+function createGameCard(game, index) {
+  const card = document.createElement("div");
+  card.className = "game-card";
+  card.dataset.index = index;
+  
+  if (game.cover) {
+    const coverUrl = game.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML);
+    card.style.backgroundImage = `url(${coverUrl})`;
+    card.style.backgroundSize = 'cover';
+    card.style.backgroundPosition = 'center';
+  }
+  
+  if (game.star) {
+    const star = document.createElement("span");
+    star.className = "star";
+    star.textContent = "★";
+    card.appendChild(star);
+  }
+  
+  const title = document.createElement("div");
+  title.className = "title";
+  title.textContent = game.name;
+  card.appendChild(title);
+  
+  card.onclick = () => openGame(game);
+  
+  return card;
+}
+
+function loadGames() {
+  const grid = document.getElementById('gamesGrid');
+  
+  fetch(ZONES + "?t=" + Date.now())
+    .then(r => {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
+    .then(data => {
+      games = data.filter(g => !g.name.toLowerCase().includes("suggest") && !g.name.includes("[!]"));
+      
+      // Add Roblox and GTA at the beginning
+      games.unshift(
+        { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", external: true },
+        { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true }
+      );
+      
+      renderGames();
+    })
+    .catch(err => {
+      console.error("Error loading games:", err);
+      // Load default games on error
+      games = [
+        { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true },
+        { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", external: true }
+      ];
+      renderGames();
+    });
+}
+
+function getRobloxHTML() {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>roblox - Truffled</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+iframe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+}
+#truffled-logo {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    z-index: 9999;
+}
+</style>
+</head>
+<body>
+<iframe src="https://nevertraveling.thepresenttraveller.com/gamefile/nowgg/roblox.html?prefix=149" allowfullscreen></iframe>
+<a href="https://nevertraveling.thepresenttraveller.com" target="_blank">
+    <img id="truffled-logo" src="https://nevertraveling.thepresenttraveller.com/png/logo.png" alt="Logo">
+</a>
+</body>
+</html>`;
+}
+
+function renderGames() {
+  const grid = document.getElementById('gamesGrid');
+  grid.innerHTML = '';
+  
+  games.forEach((game, index) => {
+    const card = createGameCard(game, index);
+    grid.appendChild(card);
+  });
+  
+  updateFocus();
+}
+
+function updateFocus() {
+  const cards = document.querySelectorAll('.game-card');
+  cards.forEach((card, index) => {
+    if (index === focusedIndex) {
+      card.classList.add('focused');
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      card.classList.remove('focused');
+    }
+  });
+}
+
+// Keyboard Navigation
+document.addEventListener('keydown', (e) => {
+  const cards = document.querySelectorAll('.game-card');
+  const totalGames = cards.length;
+  const maxIndex = totalGames - 1;
+  
+  if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    focusedIndex = focusedIndex > 0 ? focusedIndex - 1 : maxIndex;
+    updateFocus();
+    showKeyboardHint();
+  } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
+    e.preventDefault();
+    focusedIndex = focusedIndex < maxIndex ? focusedIndex + 1 : 0;
+    updateFocus();
+    showKeyboardHint();
+  } else if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    if (games[focusedIndex]) {
+      openGame(games[focusedIndex]);
+    }
+  }
+});
+
+function showKeyboardHint() {
+  const hint = document.getElementById('keyboardHint');
+  hint.classList.add('show');
+  setTimeout(() => {
+    hint.classList.remove('show');
+  }, 2000);
+}
+
+function openGame(game) {
+  if (game.external) {
+    window.open(game.url, '_blank');
+  } else if (game.html) {
+    const win = window.open("about:blank", "_blank");
+    win.document.open();
+    win.document.write(game.html);
+    win.document.close();
+  } else {
+    fetch(game.url.replace("{HTML_URL}", HTML))
+      .then(r => r.text())
+      .then(t => {
+        const win = window.open("about:blank", "_blank");
+        win.document.open();
+        win.document.write(t);
+        win.document.close();
+      })
+      .catch(err => {
+        alert('Error loading game');
+      });
+  }
+}
+
+// Window Functions
 function openWindow(url, title) {
   const win = document.getElementById('window');
   const frame = document.getElementById('frame');
   const titleSpan = document.getElementById('windowTitle');
-  frame.src = url; titleSpan.textContent = title; win.classList.remove('hidden');
+  frame.src = url; 
+  titleSpan.textContent = title; 
+  win.classList.remove('hidden');
 }
 
 function closeWindow() {
   const win = document.getElementById('window');
   const frame = document.getElementById('frame');
-  frame.src = ''; win.classList.add('hidden');
+  frame.src = ''; 
+  win.classList.add('hidden');
 }
 
-function openApps() { document.getElementById('appsPanel').classList.remove('hidden'); }
-function closeApps() { document.getElementById('appsPanel').classList.add('hidden'); }
+// Apps Panel
+function openApps() { 
+  document.getElementById('appsPanel').classList.remove('hidden'); 
+}
+
+function closeApps() { 
+  document.getElementById('appsPanel').classList.add('hidden'); 
+}
 
 function openApp(url, title) {
   closeApps();
   const win = document.getElementById('window');
   const frame = document.getElementById('frame');
   const titleSpan = document.getElementById('windowTitle');
-  frame.src = url; titleSpan.textContent = title; win.classList.remove('hidden');
+  frame.src = url; 
+  titleSpan.textContent = title; 
+  win.classList.remove('hidden');
 }
 
-function openGnMoviesWindow() { closeApps(); document.getElementById('gnMoviesWindow').classList.remove('hidden'); }
-function closeGnMoviesWindow() { document.getElementById('gnMoviesWindow').classList.add('hidden'); }
+// GN Movies
+function openGnMoviesWindow() { 
+  closeApps(); 
+  document.getElementById('gnMoviesWindow').classList.remove('hidden'); 
+}
+
+function closeGnMoviesWindow() { 
+  document.getElementById('gnMoviesWindow').classList.add('hidden'); 
+}
 
 function launchGnMovies() {
   try {
-    const url = "https://raw.githubusercontent.com/GN-math-hub/School-Chaets/refs/heads/main/GN%20Movies%202026%20   !!!";
+    const url = "https://raw.githubusercontent.com/GN-math-hub/School-Chaets/refs/heads/main/GN%20Movies%202026%20!!!";
     fetch(url + "?" + Date.now())
-      .then(response => { if (!response.ok) throw new Error('Network response was not ok'); return response.text(); })
+      .then(response => { 
+        if (!response.ok) throw new Error('Network response was not ok'); 
+        return response.text(); 
+      })
       .then(text => {
         const newWin = window.open("about:blank", "_blank");
-        if (newWin) { newWin.document.open(); newWin.document.write(text); newWin.document.close(); }
-        else { alert('Popup blocked! Please allow popups for this site.'); }
+        if (newWin) { 
+          newWin.document.open(); 
+          newWin.document.write(text); 
+          newWin.document.close(); 
+        } else { 
+          alert('Popup blocked! Please allow popups for this site.'); 
+        }
       })
-      .catch(error => { console.error('Fetch error:', error); alert('Failed to load content. Please check the URL.'); });
-  } catch (error) { console.error('error:', error); }
+      .catch(error => { 
+        console.error('Fetch error:', error); 
+        alert('Failed to load content. Please check the URL.'); 
+      });
+  } catch (error) { 
+    console.error('error:', error); 
+  }
 }
 
-function openSettings() { document.getElementById('settings').classList.remove('hidden'); }
-function closeSettings() { document.getElementById('settings').classList.add('hidden'); }
+// Settings
+function openSettings() { 
+  document.getElementById('settings').classList.remove('hidden'); 
+}
+
+function closeSettings() { 
+  document.getElementById('settings').classList.add('hidden'); 
+}
 
 function setWallpaper(name) {
   const url = wallpapers[name];
@@ -379,6 +1008,7 @@ function setWallpaper(name) {
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundRepeat = 'no-repeat';
     document.body.style.backgroundAttachment = 'fixed';
+    localStorage.setItem('selectedWallpaper', name);
   }
 }
 
@@ -394,12 +1024,30 @@ function setCloak() {
   const name = document.getElementById('cloakInput').value || 'about:blank';
   document.title = name;
   const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-  link.type = 'image/x-icon'; link.rel = 'shortcut icon'; link.href = 'data:image/x-icon;base64,';
+  link.type = 'image/x-icon'; 
+  link.rel = 'shortcut icon'; 
+  link.href = 'data:image/x-icon;base64,';
   document.getElementsByTagName('head')[0].appendChild(link);
   history.pushState({}, name, 'about:blank');
 }
 
-function closeVote() { document.getElementById('votePopup').style.display = 'none'; }
+function closeVote() { 
+  document.getElementById('votePopup').style.display = 'none'; 
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  // Load saved wallpaper
+  const savedWallpaper = localStorage.getItem('selectedWallpaper');
+  if (savedWallpaper && wallpapers[savedWallpaper]) {
+    setWallpaper(savedWallpaper);
+  } else {
+    setWallpaper('goku');
+  }
+  
+  // Load games
+  loadGames();
+});
 </script>
 
 </body>
