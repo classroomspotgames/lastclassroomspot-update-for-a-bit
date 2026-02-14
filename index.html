@@ -122,9 +122,35 @@ body::after {
 /* Header */
 .header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+}
+
+.search-container {
+  position: relative;
+}
+
+#searchInput {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 14px;
+  width: 250px;
+  backdrop-filter: blur(10px);
+  outline: none;
+  transition: all 0.3s;
+}
+
+#searchInput::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+#searchInput:focus {
+  background: rgba(255,255,255,0.25);
+  width: 300px;
 }
 
 .time-display {
@@ -134,39 +160,81 @@ body::after {
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-/* Games Grid - Nintendo Switch Style - 5 per row */
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 30px;
+/* Games Carousel Container */
+.games-carousel-container {
   flex: 1;
-  align-content: start;
-  overflow-y: auto;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.games-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1400px;
+}
+
+/* Navigation Arrows */
+.nav-arrow {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.3);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.nav-arrow:hover {
+  background: rgba(230, 0, 18, 0.8);
+  border-color: #e60012;
+  transform: scale(1.1);
+}
+
+.nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Games Row - Exactly 5 games like Switch */
+.games-row {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  flex: 1;
 }
 
 .game-card {
-  position: relative;
-  aspect-ratio: 1;
+  width: 180px;
+  height: 180px;
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
   background: rgba(255,255,255,0.1);
   backdrop-filter: blur(10px);
   border: 3px solid transparent;
+  position: relative;
+  flex-shrink: 0;
 }
 
 .game-card:hover, .game-card.focused {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  border-color: rgba(255,255,255,0.5);
-}
-
-.game-card.focused {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   border-color: #e60012;
-  box-shadow: 0 0 0 4px rgba(230, 0, 18, 0.3), 0 20px 60px rgba(0,0,0,0.4);
 }
 
 .game-card img {
@@ -177,16 +245,16 @@ body::after {
 }
 
 .game-card:hover img, .game-card.focused img {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .game-card .star {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
   color: #ffd700;
-  font-size: 20px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  font-size: 24px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
   z-index: 2;
 }
 
@@ -195,17 +263,41 @@ body::after {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px;
-  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  padding: 15px;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  text-align: center;
   opacity: 0;
   transition: opacity 0.3s;
 }
 
 .game-card:hover .title, .game-card.focused .title {
   opacity: 1;
+}
+
+/* Page Indicator */
+.page-indicator {
+  display: flex;
+  gap: 8px;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.page-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.page-dot.active {
+  background: #e60012;
+  width: 30px;
+  border-radius: 5px;
 }
 
 /* Nintendo Switch Style Dock */
@@ -255,7 +347,6 @@ body::after {
   background: #e60012;
 }
 
-/* Specific dock item colors */
 .dock-item.apps-btn {
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
 }
@@ -319,7 +410,7 @@ body::after {
   background: white; 
 }
 
-/* Settings panel - Switch Style */
+/* Settings panel */
 .settings {
   position: fixed; 
   top: 50%; 
@@ -384,7 +475,7 @@ body::after {
   color: rgba(255,255,255,0.5);
 }
 
-/* Apps Grid Panel - Switch Style */
+/* Apps Grid Panel */
 .apps-panel {
   position: fixed; 
   top: 50%; 
@@ -518,22 +609,6 @@ body::after {
   opacity: 1;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.1);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.3);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.5);
-}
-
 /* Keyboard hint */
 .keyboard-hint {
   position: fixed;
@@ -571,19 +646,31 @@ body::after {
 
 <div class="main-container">
   <div class="header">
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="🔍 Search games..." autocomplete="off">
+    </div>
     <div class="time-display" id="clock">12:00 PM</div>
   </div>
 
-  <!-- Main Games Grid - 5 per row -->
-  <div class="games-grid" id="gamesGrid">
-    <!-- Games loaded dynamically -->
+  <!-- Games Carousel - Exactly like Nintendo Switch -->
+  <div class="games-carousel-container">
+    <div class="games-wrapper">
+      <button class="nav-arrow" id="prevBtn" onclick="prevPage()">◀</button>
+      <div class="games-row" id="gamesRow">
+        <!-- Games loaded here -->
+      </div>
+      <button class="nav-arrow" id="nextBtn" onclick="nextPage()">▶</button>
+    </div>
+    <div class="page-indicator" id="pageIndicator">
+      <!-- Dots loaded here -->
+    </div>
   </div>
 </div>
 
 <!-- Keyboard Navigation Hint -->
-<div class="keyboard-hint" id="keyboardHint">Use A / D to navigate</div>
+<div class="keyboard-hint" id="keyboardHint">Use A / D or ◀ / ▶ to navigate</div>
 
-<!-- Nintendo Switch Style Dock - No Games Button -->
+<!-- Nintendo Switch Style Dock -->
 <div class="dock-container">
   <div class="dock-item" onclick="openWindow('movies.html','Movies')" title="Movies">
     <svg viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
@@ -724,76 +811,19 @@ setInterval(updateClock, 1000);
 updateClock();
 
 // Games Data
-let games = [];
+let allGames = [];
+let filteredGames = [];
+let currentPage = 0;
+const gamesPerPage = 5;
 let focusedIndex = 0;
-const gamesPerRow = 5;
 
-// Load games from API
+// API URLs
 const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json";
 const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/";
 const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
 
 const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
 const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3";
-
-function createGameCard(game, index) {
-  const card = document.createElement("div");
-  card.className = "game-card";
-  card.dataset.index = index;
-  
-  if (game.cover) {
-    const coverUrl = game.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML);
-    card.style.backgroundImage = `url(${coverUrl})`;
-    card.style.backgroundSize = 'cover';
-    card.style.backgroundPosition = 'center';
-  }
-  
-  if (game.star) {
-    const star = document.createElement("span");
-    star.className = "star";
-    star.textContent = "★";
-    card.appendChild(star);
-  }
-  
-  const title = document.createElement("div");
-  title.className = "title";
-  title.textContent = game.name;
-  card.appendChild(title);
-  
-  card.onclick = () => openGame(game);
-  
-  return card;
-}
-
-function loadGames() {
-  const grid = document.getElementById('gamesGrid');
-  
-  fetch(ZONES + "?t=" + Date.now())
-    .then(r => {
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      return r.json();
-    })
-    .then(data => {
-      games = data.filter(g => !g.name.toLowerCase().includes("suggest") && !g.name.includes("[!]"));
-      
-      // Add Roblox and GTA at the beginning
-      games.unshift(
-        { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", external: true },
-        { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true }
-      );
-      
-      renderGames();
-    })
-    .catch(err => {
-      console.error("Error loading games:", err);
-      // Load default games on error
-      games = [
-        { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true },
-        { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", external: true }
-      ];
-      renderGames();
-    });
-}
 
 function getRobloxHTML() {
   return `<!DOCTYPE html>
@@ -839,53 +869,198 @@ iframe {
 </html>`;
 }
 
-function renderGames() {
-  const grid = document.getElementById('gamesGrid');
-  grid.innerHTML = '';
-  
-  games.forEach((game, index) => {
-    const card = createGameCard(game, index);
-    grid.appendChild(card);
-  });
-  
-  updateFocus();
+function loadGames() {
+  fetch(ZONES + "?t=" + Date.now())
+    .then(r => {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
+    .then(data => {
+      // Filter and format games
+      const apiGames = data.filter(g => !g.name.toLowerCase().includes("suggest") && !g.name.includes("[!]")).map(g => ({
+        name: g.name,
+        cover: g.cover ? g.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML) : '',
+        url: g.url,
+        star: false
+      }));
+      
+      // Add Roblox and GTA at the beginning
+      allGames = [
+        { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true },
+        { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", external: true, star: false },
+        ...apiGames
+      ];
+      
+      filteredGames = [...allGames];
+      currentPage = 0;
+      renderGames();
+      renderPageIndicator();
+    })
+    .catch(err => {
+      console.error("Error loading games:", err);
+      // Load default games on error
+      allGames = [
+        { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true },
+        { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", external: true, star: false }
+      ];
+      filteredGames = [...allGames];
+      renderGames();
+      renderPageIndicator();
+    });
 }
 
-function updateFocus() {
-  const cards = document.querySelectorAll('.game-card');
-  cards.forEach((card, index) => {
-    if (index === focusedIndex) {
-      card.classList.add('focused');
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } else {
-      card.classList.remove('focused');
+function renderGames() {
+  const row = document.getElementById('gamesRow');
+  row.innerHTML = '';
+  
+  const startIdx = currentPage * gamesPerPage;
+  const endIdx = Math.min(startIdx + gamesPerPage, filteredGames.length);
+  const pageGames = filteredGames.slice(startIdx, endIdx);
+  
+  pageGames.forEach((game, idx) => {
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.dataset.index = startIdx + idx;
+    
+    if (game.cover) {
+      const img = document.createElement("img");
+      img.src = game.cover;
+      img.alt = game.name;
+      card.appendChild(img);
     }
+    
+    if (game.star) {
+      const star = document.createElement("span");
+      star.className = "star";
+      star.textContent = "★";
+      card.appendChild(star);
+    }
+    
+    const title = document.createElement("div");
+    title.className = "title";
+    title.textContent = game.name;
+    card.appendChild(title);
+    
+    card.onclick = () => openGame(game);
+    
+    // Keyboard focus
+    if (idx === focusedIndex) {
+      card.classList.add('focused');
+    }
+    
+    row.appendChild(card);
+  });
+  
+  // Update arrows
+  document.getElementById('prevBtn').disabled = currentPage === 0;
+  document.getElementById('nextBtn').disabled = endIdx >= filteredGames.length;
+  
+  updatePageIndicator();
+}
+
+function renderPageIndicator() {
+  const indicator = document.getElementById('pageIndicator');
+  indicator.innerHTML = '';
+  
+  const totalPages = Math.ceil(filteredGames.length / gamesPerPage);
+  for (let i = 0; i < totalPages; i++) {
+    const dot = document.createElement("div");
+    dot.className = "page-dot" + (i === currentPage ? " active" : "");
+    dot.onclick = () => {
+      currentPage = i;
+      focusedIndex = 0;
+      renderGames();
+    };
+    indicator.appendChild(dot);
+  }
+}
+
+function updatePageIndicator() {
+  const dots = document.querySelectorAll('.page-dot');
+  dots.forEach((dot, idx) => {
+    dot.classList.toggle('active', idx === currentPage);
   });
 }
+
+function nextPage() {
+  const maxPage = Math.ceil(filteredGames.length / gamesPerPage) - 1;
+  if (currentPage < maxPage) {
+    currentPage++;
+    focusedIndex = 0;
+    renderGames();
+    showKeyboardHint();
+  }
+}
+
+function prevPage() {
+  if (currentPage > 0) {
+    currentPage--;
+    focusedIndex = 0;
+    renderGames();
+    showKeyboardHint();
+  }
+}
+
+// Search functionality
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase().trim();
+  
+  if (query === '') {
+    filteredGames = [...allGames];
+  } else {
+    filteredGames = allGames.filter(g => g.name.toLowerCase().includes(query));
+  }
+  
+  currentPage = 0;
+  focusedIndex = 0;
+  renderGames();
+  renderPageIndicator();
+});
 
 // Keyboard Navigation
 document.addEventListener('keydown', (e) => {
   const cards = document.querySelectorAll('.game-card');
-  const totalGames = cards.length;
-  const maxIndex = totalGames - 1;
+  const cardsOnPage = cards.length;
   
   if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
     e.preventDefault();
-    focusedIndex = focusedIndex > 0 ? focusedIndex - 1 : maxIndex;
-    updateFocus();
+    if (focusedIndex > 0) {
+      focusedIndex--;
+      updateFocus();
+    } else if (currentPage > 0) {
+      prevPage();
+      focusedIndex = gamesPerPage - 1;
+      updateFocus();
+    }
     showKeyboardHint();
   } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
     e.preventDefault();
-    focusedIndex = focusedIndex < maxIndex ? focusedIndex + 1 : 0;
-    updateFocus();
+    if (focusedIndex < cardsOnPage - 1 && focusedIndex < filteredGames.slice(currentPage * gamesPerPage).length - 1) {
+      focusedIndex++;
+      updateFocus();
+    } else {
+      const maxPage = Math.ceil(filteredGames.length / gamesPerPage) - 1;
+      if (currentPage < maxPage) {
+        nextPage();
+        updateFocus();
+      }
+    }
     showKeyboardHint();
-  } else if (e.key === 'Enter' || e.key === ' ') {
+  } else if (e.key === 'Enter') {
     e.preventDefault();
-    if (games[focusedIndex]) {
-      openGame(games[focusedIndex]);
+    const startIdx = currentPage * gamesPerPage;
+    if (filteredGames[startIdx + focusedIndex]) {
+      openGame(filteredGames[startIdx + focusedIndex]);
     }
   }
 });
+
+function updateFocus() {
+  const cards = document.querySelectorAll('.game-card');
+  cards.forEach((card, idx) => {
+    card.classList.toggle('focused', idx === focusedIndex);
+  });
+}
 
 function showKeyboardHint() {
   const hint = document.getElementById('keyboardHint');
@@ -903,7 +1078,7 @@ function openGame(game) {
     win.document.open();
     win.document.write(game.html);
     win.document.close();
-  } else {
+  } else if (game.url) {
     fetch(game.url.replace("{HTML_URL}", HTML))
       .then(r => r.text())
       .then(t => {
@@ -1037,7 +1212,6 @@ function closeVote() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  // Load saved wallpaper
   const savedWallpaper = localStorage.getItem('selectedWallpaper');
   if (savedWallpaper && wallpapers[savedWallpaper]) {
     setWallpaper(savedWallpaper);
@@ -1045,7 +1219,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setWallpaper('goku');
   }
   
-  // Load games
   loadGames();
 });
 </script>
