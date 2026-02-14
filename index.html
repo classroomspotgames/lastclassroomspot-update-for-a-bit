@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>about:blank</title>
+<title>Student Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="favicon.ico">
 <style>
@@ -18,6 +18,138 @@ body {
   min-height: 100vh;
   overflow: hidden;
   position: relative;
+}
+
+/* Login Screen */
+.login-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.5s;
+}
+
+.login-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.login-banner {
+  width: 300px;
+  height: auto;
+  margin-bottom: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-box {
+  background: rgba(255,255,255,0.95);
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-box h1 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.login-box p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.login-input:focus {
+  border-color: #667eea;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+}
+
+.error-msg {
+  color: #e60012;
+  margin-top: 15px;
+  font-size: 14px;
+  display: none;
+}
+
+/* Intro Screen */
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  flex-direction: column;
+}
+
+.intro-screen.active {
+  display: flex;
+}
+
+.intro-gif {
+  max-width: 80%;
+  max-height: 60vh;
+  border-radius: 20px;
+}
+
+.intro-text {
+  color: white;
+  margin-top: 30px;
+  font-size: 24px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Main Site */
+.main-site {
+  display: none;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.main-site.active {
+  display: flex;
 }
 
 /* Dynamic Wallpaper Background */
@@ -47,117 +179,40 @@ body::after {
   pointer-events: none;
 }
 
-/* VOTE POPUP */
-#votePopup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  backdrop-filter: blur(10px);
-}
-
-#voteBox {
-  background: linear-gradient(135deg, #e60012 0%, #b3000e 100%);
-  color: white;
-  padding: 32px;
-  border-radius: 24px;
-  max-width: 360px;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  border: 2px solid rgba(255,255,255,0.1);
-}
-
-#voteBox h2 { 
-  margin-top: 0; 
-  font-size: 24px;
-  margin-bottom: 16px;
-}
-
-#voteBox p {
-  margin-bottom: 24px;
-  font-size: 15px;
-  line-height: 1.5;
-  opacity: 0.95;
-}
-
-#voteBox button { 
-  margin: 8px; 
-  padding: 12px 24px; 
-  border: none; 
-  border-radius: 12px; 
-  cursor: pointer; 
-  font-size: 15px;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-#voteBtn { 
-  background: white; 
-  color: #e60012; 
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-#voteBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
-}
-#closeVote { 
-  background: rgba(255,255,255,0.2); 
-  color: white; 
-}
-#closeVote:hover {
-  background: rgba(255,255,255,0.3);
-}
-
-/* Main Container */
-.main-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 40px 60px 140px 60px;
-  position: relative;
-}
-
 /* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-}
-
-.search-container {
-  position: relative;
-}
-
-#searchInput {
-  padding: 12px 20px;
-  border-radius: 25px;
-  border: none;
-  background: rgba(255,255,255,0.15);
-  color: white;
-  font-size: 14px;
-  width: 250px;
+  padding: 20px 40px;
+  background: rgba(0,0,0,0.3);
   backdrop-filter: blur(10px);
-  outline: none;
-  transition: all 0.3s;
 }
 
-#searchInput::placeholder {
-  color: rgba(255,255,255,0.6);
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-#searchInput:focus {
-  background: rgba(255,255,255,0.25);
-  width: 300px;
+.logo-banner {
+  height: 50px;
+  border-radius: 10px;
+}
+
+.total-games {
+  color: white;
+  background: rgba(230, 0, 18, 0.8);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .time-display {
   color: white;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 /* Games Carousel Container */
@@ -168,6 +223,7 @@ body::after {
   justify-content: center;
   align-items: center;
   position: relative;
+  padding: 20px;
 }
 
 .games-wrapper {
@@ -176,7 +232,7 @@ body::after {
   justify-content: center;
   gap: 20px;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
 }
 
 /* Navigation Arrows */
@@ -211,15 +267,15 @@ body::after {
 /* Games Row - Exactly 5 games like Switch */
 .games-row {
   display: flex;
-  gap: 25px;
+  gap: 20px;
   justify-content: center;
   flex: 1;
 }
 
 .game-card {
-  width: 180px;
-  height: 180px;
-  border-radius: 20px;
+  width: 160px;
+  height: 160px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -250,10 +306,10 @@ body::after {
 
 .game-card .star {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 8px;
+  left: 8px;
   color: #ffd700;
-  font-size: 24px;
+  font-size: 20px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
   z-index: 2;
 }
@@ -263,10 +319,10 @@ body::after {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 15px;
+  padding: 12px;
   background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
   color: white;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   text-align: center;
   opacity: 0;
@@ -303,24 +359,24 @@ body::after {
 /* Nintendo Switch Style Dock */
 .dock-container {
   position: fixed;
-  bottom: 30px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 16px;
-  padding: 16px 24px;
+  gap: 12px;
+  padding: 12px 20px;
   background: rgba(30, 30, 30, 0.95);
-  border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255,255,255,0.1);
   z-index: 100;
 }
 
 .dock-item {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -328,31 +384,21 @@ body::after {
   transition: all 0.2s;
   background: rgba(255,255,255,0.1);
   border: 2px solid transparent;
-  position: relative;
 }
 
 .dock-item:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   background: rgba(255,255,255,0.2);
-  border-color: rgba(255,255,255,0.3);
 }
 
 .dock-item svg {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   fill: white;
 }
 
-.dock-item.active {
-  background: #e60012;
-}
-
-.dock-item.apps-btn {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-}
-
-.dock-item.apps-btn:hover {
-  background: linear-gradient(135deg, #ff8585 0%, #f07040 100%);
+.dock-item.settings-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 /* Window styling */
@@ -380,7 +426,6 @@ body::after {
   padding: 16px 20px; 
   background: rgba(255,255,255,0.05); 
   border-bottom: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
 }
 .topbar span { 
   color: white; 
@@ -460,159 +505,10 @@ body::after {
   border-color: transparent;
 }
 
-.settings input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 12px;
-  color: white;
-  font-size: 14px;
-}
-
-.settings input::placeholder {
-  color: rgba(255,255,255,0.5);
-}
-
-/* Apps Grid Panel */
-.apps-panel {
-  position: fixed; 
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -50%);
-  background: rgba(30, 30, 30, 0.98); 
-  padding: 40px; 
-  border-radius: 24px;
-  box-shadow: 0 25px 80px rgba(0,0,0,0.9); 
-  z-index: 1002;
-  max-width: 800px; 
-  width: 90%; 
-  max-height: 80vh; 
-  overflow-y: auto;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.apps-panel.hidden { display: none; }
-.apps-panel h2 { 
-  color: white; 
-  margin-top: 0; 
-  margin-bottom: 24px; 
-  text-align: center;
-  font-size: 28px;
-  font-weight: 700;
-}
-.apps-grid-panel {
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
-  gap: 20px;
-}
-.app-item {
-  display: flex; 
-  flex-direction: column; 
-  align-items: center;
-  padding: 20px; 
-  background: rgba(255,255,255,0.05);
-  border-radius: 16px; 
-  cursor: pointer; 
-  transition: all 0.2s; 
-  border: 2px solid transparent;
-}
-.app-item:hover { 
-  background: rgba(255,255,255,0.1); 
-  transform: translateY(-5px); 
-  border-color: rgba(255,255,255,0.2); 
-}
-.app-item img { 
-  width: 48px; 
-  height: 48px; 
-  border-radius: 12px; 
-  margin-bottom: 8px; 
-  object-fit: cover; 
-}
-.app-item span { 
-  color: white; 
-  font-size: 12px; 
-  text-align: center; 
-}
-.close-apps-btn {
-  margin-top: 24px; 
-  padding: 14px; 
-  background: #e60012; 
-  color: white;
-  border: none; 
-  border-radius: 12px; 
-  cursor: pointer; 
-  width: 100%; 
-  font-size: 16px;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-.close-apps-btn:hover { 
-  background: #ff1a2e;
-  transform: translateY(-2px);
-}
-
-/* GN Movies Window */
-.gn-movies-window {
-  position: fixed; 
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -50%);
-  width: 90%; 
-  height: 90%; 
-  background: #0a0a0a; 
-  border-radius: 20px;
-  box-shadow: 0 25px 80px rgba(0,0,0,0.9); 
-  z-index: 1003;
-  display: flex; 
-  flex-direction: column; 
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.gn-movies-window.hidden { display: none; }
-.gn-movies-content { 
-  flex: 1; 
-  width: 100%; 
-  border: none; 
-  background: #0a0a0a; 
-}
-.launch-button {
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  width: 100%; 
-  height: 100%; 
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); 
-  color: #ffffff;
-  font-family: inherit; 
-  font-size: 28px; 
-  font-weight: 700;
-  cursor: pointer; 
-  text-decoration: none; 
-  transition: all 0.3s; 
-  border: none;
-  flex-direction: column;
-  gap: 20px;
-}
-.launch-button::before {
-  content: '▶';
-  font-size: 64px;
-  color: #e60012;
-  opacity: 0.8;
-  transition: transform 0.3s;
-}
-.launch-button:hover { 
-  background: linear-gradient(135deg, #2a0a3a 0%, #1a0a2a 100%); 
-}
-.launch-button:hover::before {
-  transform: scale(1.1);
-  opacity: 1;
-}
-
 /* Keyboard hint */
 .keyboard-hint {
   position: fixed;
-  bottom: 110px;
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
   color: rgba(255,255,255,0.6);
@@ -631,28 +527,40 @@ body::after {
 }
 </style>
 </head>
-
 <body>
 
-<!-- VOTE NOTE -->
-<div id="votePopup">
-  <div id="voteBox">
-    <h2>❤️ Support Us</h2>
-    <p>Do you love our site?<br>Please support us by voting!</p>
-    <button id="voteBtn" onclick="window.open('https://ubghub.org/?site=classroomspot','_blank')">Vote</button>
-    <button id="closeVote" onclick="closeVote()">Exit</button>
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEtseCaQReYgXH1C-tdRM6kNttqlXvFyym_g&s" alt="Portal" class="login-banner">
+  <div class="login-box">
+    <h1>🔒 Student Login</h1>
+    <p>Welcome to the Programming Portal</p>
+    <input type="text" class="login-input" id="username" placeholder="Username" autocomplete="off">
+    <input type="password" class="login-input" id="password" placeholder="Password">
+    <button class="login-btn" onclick="checkLogin()">Sign In</button>
+    <div class="error-msg" id="errorMsg">Invalid username or password!</div>
   </div>
 </div>
 
-<div class="main-container">
+<!-- INTRO SCREEN -->
+<div class="intro-screen" id="introScreen">
+  <img src="https://68.media.tumblr.com/ecea9391e51144ebfb48c0451f11ee70/tumblr_oh98s6US8x1qjoleso1_500.gif" alt="Loading" class="intro-gif">
+  <div class="intro-text">Loading your workspace...</div>
+</div>
+
+<!-- MAIN SITE -->
+<div class="main-site" id="mainSite">
   <div class="header">
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="🔍 Search games..." autocomplete="off">
+    <div class="logo-section">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEtseCaQReYgXH1C-tdRM6kNttqlXvFyym_g&s" alt="Portal" class="logo-banner">
     </div>
-    <div class="time-display" id="clock">12:00 PM</div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <span class="total-games" id="totalGames">Total Games: Loading...</span>
+      <span class="time-display" id="clock">12:00 PM</span>
+    </div>
   </div>
 
-  <!-- Games Carousel - Exactly like Nintendo Switch -->
+  <!-- Games Carousel -->
   <div class="games-carousel-container">
     <div class="games-wrapper">
       <button class="nav-arrow" id="prevBtn" onclick="prevPage()">◀</button>
@@ -661,16 +569,14 @@ body::after {
       </div>
       <button class="nav-arrow" id="nextBtn" onclick="nextPage()">▶</button>
     </div>
-    <div class="page-indicator" id="pageIndicator">
-      <!-- Dots loaded here -->
-    </div>
+    <div class="page-indicator" id="pageIndicator"></div>
   </div>
 </div>
 
 <!-- Keyboard Navigation Hint -->
 <div class="keyboard-hint" id="keyboardHint">Use A / D or ◀ / ▶ to navigate</div>
 
-<!-- Nintendo Switch Style Dock -->
+<!-- Dock -->
 <div class="dock-container">
   <div class="dock-item" onclick="openWindow('movies.html','Movies')" title="Movies">
     <svg viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
@@ -681,74 +587,8 @@ body::after {
   <div class="dock-item" onclick="openWindow('unblockers.html','Unblocker')" title="Unblocker">
     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
   </div>
-  <div class="dock-item apps-btn" onclick="openApps()" title="All Apps">
-    <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
-  </div>
-  <div class="dock-item" onclick="openSettings()" title="Settings">
+  <div class="dock-item settings-btn" onclick="openSettings()" title="Settings">
     <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L5.09 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-  </div>
-</div>
-
-<!-- APPS PANEL -->
-<div id="appsPanel" class="apps-panel hidden">
-  <h2>📱 All Apps</h2>
-  <div class="apps-grid-panel">
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Discord', 'Discord')">
-      <img src="https://tse2.mm.bing.net/th/id/OIP.JxDw-5bFs4goAom52j2g5gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Discord">
-      <span>Discord</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Amazon%20Luna', 'Amazon Luna')">
-      <img src="https://tse4.mm.bing.net/th/id/OIP.tjzLkaddOhhyYu8kSFZawQAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Amazon Luna">
-      <span>Amazon Luna</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=TikTok', 'TikTok')">
-      <img src="https://tse3.mm.bing.net/th/id/OIP.K27Zig7nc-qgGAgSXxIzHQHaHv?rs=1&pid=ImgDetMain&o=7&rm=3" alt="TikTok">
-      <span>TikTok</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Poki', 'Poki')">
-      <img src="https://poki.com/favicon.ico" alt="Poki">
-      <span>Poki</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Snapchat', 'Snapchat')">
-      <img src="https://tse1.mm.bing.net/th/id/OIP.SrWb9kN1ONDZkmQpPvPEeQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Snapchat">
-      <span>Snapchat</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitch', 'Twitch')">
-      <img src="https://tse2.mm.bing.net/th/id/OIP.A6d3GeTfIuEPNdnEKaX6OgHaHZ?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Twitch">
-      <span>Twitch</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Twitter%20X', 'Twitter X')">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg" alt="Twitter X">
-      <span>Twitter X</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=OpenAI', 'ChatGPT')">
-      <img src="https://static.vecteezy.com/system/resources/previews/024/558/808/large_2x/openai-chatgpt-logo-icon-free-png.png" alt="ChatGPT">
-      <span>ChatGPT</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Geforce%20NOW', 'GeForce NOW')">
-      <img src="https://www.nvidia.com/favicon.ico" alt="GeForce NOW">
-      <span>GeForce NOW</span>
-    </div>
-    <div class="app-item" onclick="openApp('https://spacing-infinite.b-cdn.net/&?q=Soundcloud', 'SoundCloud')">
-      <img src="https://th.bing.com/th/id/OIP.45nAc9ORAJayclyJBZVK-wHaHa?w=154&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="SoundCloud">
-      <span>SoundCloud</span>
-    </div>
-    <div class="app-item" onclick="openGnMoviesWindow()">
-      <img src="https://cdn-icons-png.flaticon.com/512/44/44957.png" alt="GN Movies" style="filter: invert(1);">
-      <span>GN Movies</span>
-    </div>
-  </div>
-  <button class="close-apps-btn" onclick="closeApps()">Close</button>
-</div>
-
-<!-- GN MOVIES WINDOW -->
-<div id="gnMoviesWindow" class="gn-movies-window hidden">
-  <div class="topbar">
-    <span>GN Movies</span>
-    <button onclick="closeGnMoviesWindow()">✕</button>
-  </div>
-  <div class="gn-movies-content">
-    <button class="launch-button" onclick="launchGnMovies()">Launch App</button>
   </div>
 </div>
 
@@ -778,7 +618,7 @@ body::after {
 
   <h3>🎭 Cloak</h3>
   <button onclick="openAboutBlank()">Open about:blank</button>
-  <input id="cloakInput" placeholder="Tab name">
+  <input id="cloakInput" placeholder="Tab name" style="width: 100%; padding: 10px; margin: 8px 0; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white;">
   <button onclick="setCloak()">Apply Cloak</button>
   <br><br>
   <button onclick="closeSettings()">Close Settings</button>
@@ -810,17 +650,48 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
+// Login System
+function checkLogin() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const errorMsg = document.getElementById('errorMsg');
+  
+  if (username === '1' && password === 'blockmelol') {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('introScreen').classList.add('active');
+    
+    setTimeout(() => {
+      document.getElementById('introScreen').classList.remove('active');
+      document.getElementById('mainSite').classList.add('active');
+      loadGames();
+    }, 3000);
+  } else {
+    errorMsg.style.display = 'block';
+    setTimeout(() => {
+      errorMsg.style.display = 'none';
+    }, 3000);
+  }
+}
+
+// Allow Enter key to login
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('password').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') checkLogin();
+  });
+  document.getElementById('username').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('password').focus();
+  });
+});
+
 // Games Data
 let allGames = [];
-let filteredGames = [];
 let currentPage = 0;
 const gamesPerPage = 5;
 let focusedIndex = 0;
 
-// API URLs
 const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json";
 const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/";
-const HTML = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
+const HTML_URL = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
 
 const ROBLOX_IMAGE = "https://tse3.mm.bing.net/th/id/OIP.Suu0wkaP6duvpXY_gWJucgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
 const GTA_IMAGE = "https://tse2.mm.bing.net/th/id/OIP.T6kQS4BQ4CCT6jlXGtAuDgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3";
@@ -876,34 +747,31 @@ function loadGames() {
       return r.json();
     })
     .then(data => {
-      // Filter and format games
       const apiGames = data.filter(g => !g.name.toLowerCase().includes("suggest") && !g.name.includes("[!]")).map(g => ({
         name: g.name,
-        cover: g.cover ? g.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML) : '',
+        cover: g.cover ? g.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML_URL) : '',
         url: g.url,
         star: false
       }));
       
-      // Add Roblox and GTA at the beginning
       allGames = [
         { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true },
         { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", external: true, star: false },
         ...apiGames
       ];
       
-      filteredGames = [...allGames];
+      document.getElementById('totalGames').textContent = `Total Games: ${allGames.length}`;
       currentPage = 0;
       renderGames();
       renderPageIndicator();
     })
     .catch(err => {
       console.error("Error loading games:", err);
-      // Load default games on error
       allGames = [
         { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true },
         { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://sites.google.com/view/gtavicecityforclassroomspot/sdds?authuser=1", external: true, star: false }
       ];
-      filteredGames = [...allGames];
+      document.getElementById('totalGames').textContent = `Total Games: ${allGames.length}`;
       renderGames();
       renderPageIndicator();
     });
@@ -914,8 +782,8 @@ function renderGames() {
   row.innerHTML = '';
   
   const startIdx = currentPage * gamesPerPage;
-  const endIdx = Math.min(startIdx + gamesPerPage, filteredGames.length);
-  const pageGames = filteredGames.slice(startIdx, endIdx);
+  const endIdx = Math.min(startIdx + gamesPerPage, allGames.length);
+  const pageGames = allGames.slice(startIdx, endIdx);
   
   pageGames.forEach((game, idx) => {
     const card = document.createElement("div");
@@ -943,7 +811,6 @@ function renderGames() {
     
     card.onclick = () => openGame(game);
     
-    // Keyboard focus
     if (idx === focusedIndex) {
       card.classList.add('focused');
     }
@@ -951,9 +818,8 @@ function renderGames() {
     row.appendChild(card);
   });
   
-  // Update arrows
   document.getElementById('prevBtn').disabled = currentPage === 0;
-  document.getElementById('nextBtn').disabled = endIdx >= filteredGames.length;
+  document.getElementById('nextBtn').disabled = endIdx >= allGames.length;
   
   updatePageIndicator();
 }
@@ -962,7 +828,7 @@ function renderPageIndicator() {
   const indicator = document.getElementById('pageIndicator');
   indicator.innerHTML = '';
   
-  const totalPages = Math.ceil(filteredGames.length / gamesPerPage);
+  const totalPages = Math.ceil(allGames.length / gamesPerPage);
   for (let i = 0; i < totalPages; i++) {
     const dot = document.createElement("div");
     dot.className = "page-dot" + (i === currentPage ? " active" : "");
@@ -983,7 +849,7 @@ function updatePageIndicator() {
 }
 
 function nextPage() {
-  const maxPage = Math.ceil(filteredGames.length / gamesPerPage) - 1;
+  const maxPage = Math.ceil(allGames.length / gamesPerPage) - 1;
   if (currentPage < maxPage) {
     currentPage++;
     focusedIndex = 0;
@@ -1001,24 +867,10 @@ function prevPage() {
   }
 }
 
-// Search functionality
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  const query = e.target.value.toLowerCase().trim();
-  
-  if (query === '') {
-    filteredGames = [...allGames];
-  } else {
-    filteredGames = allGames.filter(g => g.name.toLowerCase().includes(query));
-  }
-  
-  currentPage = 0;
-  focusedIndex = 0;
-  renderGames();
-  renderPageIndicator();
-});
-
 // Keyboard Navigation
 document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('mainSite').classList.contains('active')) return;
+  
   const cards = document.querySelectorAll('.game-card');
   const cardsOnPage = cards.length;
   
@@ -1035,11 +887,11 @@ document.addEventListener('keydown', (e) => {
     showKeyboardHint();
   } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
     e.preventDefault();
-    if (focusedIndex < cardsOnPage - 1 && focusedIndex < filteredGames.slice(currentPage * gamesPerPage).length - 1) {
+    if (focusedIndex < cardsOnPage - 1 && focusedIndex < allGames.slice(currentPage * gamesPerPage).length - 1) {
       focusedIndex++;
       updateFocus();
     } else {
-      const maxPage = Math.ceil(filteredGames.length / gamesPerPage) - 1;
+      const maxPage = Math.ceil(allGames.length / gamesPerPage) - 1;
       if (currentPage < maxPage) {
         nextPage();
         updateFocus();
@@ -1049,8 +901,8 @@ document.addEventListener('keydown', (e) => {
   } else if (e.key === 'Enter') {
     e.preventDefault();
     const startIdx = currentPage * gamesPerPage;
-    if (filteredGames[startIdx + focusedIndex]) {
-      openGame(filteredGames[startIdx + focusedIndex]);
+    if (allGames[startIdx + focusedIndex]) {
+      openGame(allGames[startIdx + focusedIndex]);
     }
   }
 });
@@ -1079,7 +931,7 @@ function openGame(game) {
     win.document.write(game.html);
     win.document.close();
   } else if (game.url) {
-    fetch(game.url.replace("{HTML_URL}", HTML))
+    fetch(game.url.replace("{HTML_URL}", HTML_URL))
       .then(r => r.text())
       .then(t => {
         const win = window.open("about:blank", "_blank");
@@ -1108,62 +960,6 @@ function closeWindow() {
   const frame = document.getElementById('frame');
   frame.src = ''; 
   win.classList.add('hidden');
-}
-
-// Apps Panel
-function openApps() { 
-  document.getElementById('appsPanel').classList.remove('hidden'); 
-}
-
-function closeApps() { 
-  document.getElementById('appsPanel').classList.add('hidden'); 
-}
-
-function openApp(url, title) {
-  closeApps();
-  const win = document.getElementById('window');
-  const frame = document.getElementById('frame');
-  const titleSpan = document.getElementById('windowTitle');
-  frame.src = url; 
-  titleSpan.textContent = title; 
-  win.classList.remove('hidden');
-}
-
-// GN Movies
-function openGnMoviesWindow() { 
-  closeApps(); 
-  document.getElementById('gnMoviesWindow').classList.remove('hidden'); 
-}
-
-function closeGnMoviesWindow() { 
-  document.getElementById('gnMoviesWindow').classList.add('hidden'); 
-}
-
-function launchGnMovies() {
-  try {
-    const url = "https://raw.githubusercontent.com/GN-math-hub/School-Chaets/refs/heads/main/GN%20Movies%202026%20!!!";
-    fetch(url + "?" + Date.now())
-      .then(response => { 
-        if (!response.ok) throw new Error('Network response was not ok'); 
-        return response.text(); 
-      })
-      .then(text => {
-        const newWin = window.open("about:blank", "_blank");
-        if (newWin) { 
-          newWin.document.open(); 
-          newWin.document.write(text); 
-          newWin.document.close(); 
-        } else { 
-          alert('Popup blocked! Please allow popups for this site.'); 
-        }
-      })
-      .catch(error => { 
-        console.error('Fetch error:', error); 
-        alert('Failed to load content. Please check the URL.'); 
-      });
-  } catch (error) { 
-    console.error('error:', error); 
-  }
 }
 
 // Settings
@@ -1206,11 +1002,7 @@ function setCloak() {
   history.pushState({}, name, 'about:blank');
 }
 
-function closeVote() { 
-  document.getElementById('votePopup').style.display = 'none'; 
-}
-
-// Initialize
+// Initialize wallpaper
 document.addEventListener('DOMContentLoaded', () => {
   const savedWallpaper = localStorage.getItem('selectedWallpaper');
   if (savedWallpaper && wallpapers[savedWallpaper]) {
@@ -1218,8 +1010,6 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     setWallpaper('goku');
   }
-  
-  loadGames();
 });
 </script>
 
