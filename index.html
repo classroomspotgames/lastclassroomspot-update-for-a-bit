@@ -222,13 +222,77 @@
   }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
+  /* --- Feedback Popup --- */
+  .feedback-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+    z-index: 10001;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+  .feedback-popup.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .feedback-popup h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 22px;
+  }
+  .feedback-popup p {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .feedback-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .feedback-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .vote-btn {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+  }
+  .vote-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  }
+  .exit-btn {
+    background: #f0f0f0;
+    color: #666;
+  }
+  .exit-btn:hover {
+    background: #e0e0e0;
+  }
+
   /* --- Main Site --- */
   .main-site {
     display: none;
     min-height: 100vh;
     flex-direction: column;
     background: var(--bg-light);
-    padding-bottom: 100px; /* Space for dock */
+    padding-bottom: 100px;
   }
   .main-site.active { display: flex; }
 
@@ -311,7 +375,7 @@
     font-family: monospace;
   }
 
-  /* Games Grid - Continuous Scroll Layout */
+  /* Games Grid - Nintendo Switch Style */
   .games-container {
     flex: 1;
     padding: 40px;
@@ -341,7 +405,7 @@
     position: relative;
   }
 
-  .game-card:hover {
+  .game-card:hover, .game-card.focused {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     border-color: var(--primary);
@@ -355,7 +419,7 @@
     object-fit: cover;
     transition: transform 0.3s;
   }
-  .game-card:hover img { transform: scale(1.1); }
+  .game-card:hover img, .game-card.focused img { transform: scale(1.1); }
 
   .game-card .star {
     position: absolute;
@@ -385,7 +449,64 @@
     opacity: 0;
     transition: opacity 0.3s;
   }
-  .game-card:hover .title { opacity: 1; }
+  .game-card:hover .title, .game-card.focused .title { opacity: 1; }
+
+  /* Fullscreen Game Player */
+  .game-player {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9998;
+    display: none;
+    flex-direction: column;
+  }
+  .game-player.active {
+    display: flex;
+  }
+  .game-player-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    gap: 15px;
+  }
+  .home-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .home-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+  .home-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+  .game-player-title {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+  }
+  .game-frame {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: #000;
+  }
 
   /* My List Section */
   .my-list-section {
@@ -653,6 +774,25 @@
     font-size: 16px;
   }
 
+  /* Keyboard hint */
+  .keyboard-hint {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #666;
+    font-size: 13px;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 50;
+  }
+  .keyboard-hint.show { opacity: 1; }
+
   /* Overlay */
   .overlay {
     position: fixed;
@@ -708,6 +848,16 @@
   <div class="intro-text">Loading your workspace...</div>
 </div>
 
+<!-- FEEDBACK POPUP -->
+<div class="feedback-popup" id="feedbackPopup">
+  <h2>💭 We Value Your Feedback!</h2>
+  <p>What should I add to Classroom Spot?<br>If you like Classroom Spot, please vote for us!</p>
+  <div class="feedback-buttons">
+    <button class="feedback-btn vote-btn" onclick="voteSite()">🗳️ Vote</button>
+    <button class="feedback-btn exit-btn" onclick="closeFeedback()">✕ Exit</button>
+  </div>
+</div>
+
 <!-- MAIN SITE -->
 <div class="main-site" id="mainSite">
   <div class="header">
@@ -726,7 +876,7 @@
     </div>
   </div>
 
-  <!-- Games Grid - Continuous Scroll -->
+  <!-- Games Grid - Nintendo Switch Style -->
   <div class="games-container">
     <div class="games-grid" id="gamesGrid">
       <!-- Games loaded here -->
@@ -734,10 +884,25 @@
   </div>
 </div>
 
+<!-- FULLSCREEN GAME PLAYER -->
+<div class="game-player" id="gamePlayer">
+  <div class="game-player-header">
+    <button class="home-btn" onclick="closeGame()">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </button>
+    <span class="game-player-title" id="gamePlayerTitle">Game</span>
+  </div>
+  <iframe class="game-frame" id="gameFrame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-pointer-lock"></iframe>
+</div>
+
 <!-- Visitor Counter -->
 <div class="visitor-counter" id="visitorCounter">
   👥 Visitors: <span id="visitorCount">1257</span>
 </div>
+
+<!-- Keyboard Navigation Hint -->
+<div class="keyboard-hint" id="keyboardHint">Use A / D or ← / → to navigate</div>
 
 <!-- My List Section -->
 <div class="my-list-section" id="myListSection">
@@ -845,6 +1010,22 @@ function toggleInfo() {
   tooltip.classList.toggle('active');
 }
 
+// Feedback Popup
+function showFeedback() {
+  const popup = document.getElementById('feedbackPopup');
+  popup.classList.add('active');
+}
+
+function closeFeedback() {
+  const popup = document.getElementById('feedbackPopup');
+  popup.classList.remove('active');
+}
+
+function voteSite() {
+  window.open('https://ubghub.org/?site=classroomspot', '_blank');
+  closeFeedback();
+}
+
 // Favorites System
 let favorites = JSON.parse(localStorage.getItem('codeLearnFavorites')) || [];
 
@@ -887,6 +1068,7 @@ function checkLogin() {
       document.getElementById('mainSite').classList.add('active');
       loadGames();
       updateMyListBadge();
+      showFeedback(); // Show feedback popup after loading
     }, 3000);
   } else {
     errorMsg.style.display = 'block';
@@ -937,6 +1119,7 @@ function closeMyList() {
 // Games Data
 let allGames = [];
 let filteredGames = [];
+let focusedIndex = 0;
 
 const ZONES = "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json";
 const COVER = "https://cdn.jsdelivr.net/gh/gn-math/covers@main/";
@@ -1068,6 +1251,7 @@ function handleSearch() {
   } else {
     filteredGames = allGames.filter(game => game.name.toLowerCase().includes(query));
   }
+  focusedIndex = 0;
   renderGames();
 }
 
@@ -1080,10 +1264,95 @@ function renderGames() {
     return;
   }
   
-  filteredGames.forEach((game) => {
+  filteredGames.forEach((game, index) => {
     const card = createGameCard(game);
+    if (index === focusedIndex) {
+      card.classList.add('focused');
+    }
     grid.appendChild(card);
   });
+}
+
+// Fullscreen Game Player
+function openGame(game) {
+  const player = document.getElementById('gamePlayer');
+  const frame = document.getElementById('gameFrame');
+  const title = document.getElementById('gamePlayerTitle');
+  
+  title.textContent = game.name;
+  player.classList.add('active');
+  
+  if (game.html) {
+    // For HTML content (like Roblox), we need to use srcdoc
+    frame.srcdoc = game.html;
+  } else if (game.url) {
+    // For external URLs
+    frame.src = game.url.replace("{HTML_URL}", HTML_URL);
+  }
+}
+
+function closeGame() {
+  const player = document.getElementById('gamePlayer');
+  const frame = document.getElementById('gameFrame');
+  
+  player.classList.remove('active');
+  frame.src = '';
+  frame.srcdoc = '';
+}
+
+// Keyboard Navigation
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('mainSite').classList.contains('active')) return;
+  if (document.getElementById('gamePlayer').classList.contains('active')) return;
+  if (document.getElementById('myListSection').classList.contains('active')) return;
+  
+  const cards = document.querySelectorAll('.game-card');
+  const totalCards = cards.length;
+  
+  if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    if (focusedIndex > 0) {
+      focusedIndex--;
+      updateFocus();
+      scrollToFocused();
+    }
+    showKeyboardHint();
+  } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
+    e.preventDefault();
+    if (focusedIndex < totalCards - 1) {
+      focusedIndex++;
+      updateFocus();
+      scrollToFocused();
+    }
+    showKeyboardHint();
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (filteredGames[focusedIndex]) {
+      openGame(filteredGames[focusedIndex]);
+    }
+  }
+});
+
+function updateFocus() {
+  const cards = document.querySelectorAll('.game-card');
+  cards.forEach((card, idx) => {
+    card.classList.toggle('focused', idx === focusedIndex);
+  });
+}
+
+function scrollToFocused() {
+  const focusedCard = document.querySelector('.game-card.focused');
+  if (focusedCard) {
+    focusedCard.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+  }
+}
+
+function showKeyboardHint() {
+  const hint = document.getElementById('keyboardHint');
+  hint.classList.add('show');
+  setTimeout(() => {
+    hint.classList.remove('show');
+  }, 2000);
 }
 
 // Window Functions
@@ -1115,29 +1384,6 @@ function closeAllModals() {
   closeWindow();
   closeSettings();
   closeMyList();
-}
-
-function openGame(game) {
-  if (game.external) {
-    window.open(game.url, '_blank');
-  } else if (game.html) {
-    const win = window.open("about:blank", "_blank");
-    win.document.open();
-    win.document.write(game.html);
-    win.document.close();
-  } else if (game.url) {
-    fetch(game.url.replace("{HTML_URL}", HTML_URL))
-      .then(r => r.text())
-      .then(t => {
-        const win = window.open("about:blank", "_blank");
-        win.document.open();
-        win.document.write(t);
-        win.document.close();
-      })
-      .catch(err => {
-        alert('Error loading game');
-      });
-  }
 }
 
 // Settings
