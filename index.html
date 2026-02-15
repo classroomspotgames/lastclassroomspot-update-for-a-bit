@@ -375,26 +375,38 @@
     font-family: monospace;
   }
 
-  /* Games Grid - Nintendo Switch Style */
+  /* Games Container - Nintendo Switch Style Horizontal Scroll */
   .games-container {
     flex: 1;
-    padding: 40px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    position: relative;
+    overflow: hidden;
   }
 
-  .games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 25px;
+  .games-scroll-area {
     width: 100%;
-    max-width: 1200px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 20px 40px;
+  }
+  .games-scroll-area::-webkit-scrollbar { display: none; }
+
+  .games-row {
+    display: flex;
+    gap: 25px;
+    width: max-content;
+    padding: 20px;
   }
 
   .game-card {
-    width: 100%;
-    aspect-ratio: 1;
+    width: 200px;
+    height: 200px;
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
@@ -403,11 +415,12 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     border: 3px solid transparent;
     position: relative;
+    flex-shrink: 0;
   }
 
   .game-card:hover, .game-card.focused {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     border-color: var(--primary);
   }
 
@@ -426,7 +439,7 @@
     top: 10px;
     left: 10px;
     color: #ffd700;
-    font-size: 22px;
+    font-size: 24px;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     z-index: 2;
     cursor: pointer;
@@ -814,7 +827,7 @@
     color: #666;
     padding: 40px;
     font-size: 16px;
-    grid-column: 1 / -1;
+    width: 100%;
   }
 </style>
 </head>
@@ -876,10 +889,12 @@
     </div>
   </div>
 
-  <!-- Games Grid - Nintendo Switch Style -->
+  <!-- Games Container - Nintendo Switch Style Horizontal Scroll -->
   <div class="games-container">
-    <div class="games-grid" id="gamesGrid">
-      <!-- Games loaded here -->
+    <div class="games-scroll-area" id="gamesScrollArea">
+      <div class="games-row" id="gamesRow">
+        <!-- Games loaded here -->
+      </div>
     </div>
   </div>
 </div>
@@ -967,20 +982,21 @@
 </div>
 
 <script>
+// Fixed wallpapers with direct image URLs
 const wallpapers = {
-  'goku': 'https://wallpaperaccess.com/full/9802.jpg',
-  'goku2': 'https://th.bing.com/th/id/R.45275f2e1774c1d0b1a9d1a2994e32ec?rik=X4g7q68hTKZNUA&riu=http%3a%2f%2fwallpapercave.com%2fwp%2fWhqqjsD.jpg&ehk=AY5R2%2bOgfgD2Uof%2f783mSiAXbuQgeWiZfYJuR31vKw%3d&risl=&pid=ImgRaw&r=0',
-  'naruto': 'https://tse1.mm.bing.net/th/id/OIP.S47sN1EnbmRlDgTD3coBiwHaDs?rs=1&pid=ImgDetMain&o=7&rm=3',
-  'surfer': 'https://th.bing.com/th/id/OIP.ApR_wuPX0MsWpSWi73xMpgHaEK?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3',
+  'goku': 'https://images.alphacoders.com/605/605592.jpg',
+  'goku2': 'https://wallpapercave.com/wp/wp2231791.jpg',
+  'naruto': 'https://wallpapercave.com/wp/wp18115.jpg',
+  'surfer': 'https://wallpapercave.com/wp/wp4324732.jpg',
   'surfer-gif': 'https://media.tenor.com/j1QA4Dpg4SIAAAAM/silver.gif',
-  'surfer2': 'https://tse2.mm.bing.net/th/id/OIP.GYQW-TNWUuPL_tnhGv9D2QHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
-  'naruto-gif': 'https://th.bing.com/th/id/R.e032973a23b3df2cfb20cf8c040545d0?rik=bjH3YH1rUQUXaA&riu=http%3a%2f%2forig02.deviantart.net%2f386f%2ff%2f2015%2f063%2f3%2f6%2fnaruto_attack_____by_hayabusasnake-d8kemfl.gif&ehk=oF%2fkeZtiHzVnJrcSvfsb6jE6i%2bA8vEQO1ypp3rsU6iE%3d&risl=&pid=ImgRaw&r=0',
-  'onepiece': 'https://i.pinimg.com/originals/16/48/1e/16481e1d0b4a20444b94569128d34d30.jpg',
+  'surfer2': 'https://wallpapercave.com/wp/wp4324734.jpg',
+  'naruto-gif': 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGtxdHRiM2F5eWVqbmQydGJ0Z2d0b2J4aGF3M3J3d3Q0Z3V6eG0yZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKIPtEJNr7iJNbqQ0/giphy.gif',
+  'onepiece': 'https://wallpapercave.com/wp/wp4772620.jpg',
   'jjk': 'https://wallpapercave.com/wp/wp9745449.png',
   'roblox': 'https://wallpaperaccess.com/full/196936.jpg',
   'fortnite': 'https://wallpapercave.com/wp/wp5278223.jpg',
   'dbz': 'https://wallpapercave.com/wp/wp8939942.jpg',
-  'tungtung': 'https://tse3.mm.bing.net/th/id/OIP.Gs7yG0bYERnVM_sCK4kIpAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3'
+  'tungtung': 'https://wallpaperaccess.com/full/7670331.jpg'
 };
 
 // Clock
@@ -1068,7 +1084,7 @@ function checkLogin() {
       document.getElementById('mainSite').classList.add('active');
       loadGames();
       updateMyListBadge();
-      showFeedback(); // Show feedback popup after loading
+      showFeedback();
     }, 3000);
   } else {
     errorMsg.style.display = 'block';
@@ -1213,10 +1229,18 @@ function loadGames() {
       return r.json();
     })
     .then(data => {
-      const apiGames = data.filter(g => !g.name.toLowerCase().includes("suggest") && !g.name.includes("[!]")).map(g => ({
+      // Filter out suggestion, .gg, and COMMENTS games
+      const apiGames = data.filter(g => {
+        const name = g.name.toLowerCase();
+        return !name.includes("!suggest") && 
+               !name.includes(".gg") && 
+               !name.includes("!comments") &&
+               !name.includes("[!]");
+      }).map(g => ({
         name: g.name,
         cover: g.cover ? g.cover.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML_URL) : '',
-        url: g.url,
+        url: g.url ? g.url.replace("{COVER_URL}", COVER).replace("{HTML_URL}", HTML_URL) : '',
+        external: g.url && g.url.startsWith("http"),
         star: false
       }));
       
@@ -1256,11 +1280,11 @@ function handleSearch() {
 }
 
 function renderGames() {
-  const grid = document.getElementById('gamesGrid');
-  grid.innerHTML = '';
+  const row = document.getElementById('gamesRow');
+  row.innerHTML = '';
   
   if (filteredGames.length === 0) {
-    grid.innerHTML = '<div class="no-games">No games found matching your search.</div>';
+    row.innerHTML = '<div class="no-games">No games found matching your search.</div>';
     return;
   }
   
@@ -1269,11 +1293,11 @@ function renderGames() {
     if (index === focusedIndex) {
       card.classList.add('focused');
     }
-    grid.appendChild(card);
+    row.appendChild(card);
   });
 }
 
-// Fullscreen Game Player
+// Fullscreen Game Player - Fixed to properly load games
 function openGame(game) {
   const player = document.getElementById('gamePlayer');
   const frame = document.getElementById('gameFrame');
@@ -1283,11 +1307,22 @@ function openGame(game) {
   player.classList.add('active');
   
   if (game.html) {
-    // For HTML content (like Roblox), we need to use srcdoc
+    // For HTML content (Roblox)
     frame.srcdoc = game.html;
+  } else if (game.external) {
+    // For external URLs (GTA)
+    frame.src = game.url;
   } else if (game.url) {
-    // For external URLs
-    frame.src = game.url.replace("{HTML_URL}", HTML_URL);
+    // For gn-math games - fetch the HTML content
+    fetch(game.url + "?t=" + Date.now())
+      .then(response => response.text())
+      .then(html => {
+        frame.srcdoc = html;
+      })
+      .catch(error => {
+        console.error("Failed to load game:", error);
+        frame.srcdoc = `<html><body style="background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-family:sans-serif;"><h2>Failed to load game. Please try again.</h2></body></html>`;
+      });
   }
 }
 
@@ -1300,7 +1335,7 @@ function closeGame() {
   frame.srcdoc = '';
 }
 
-// Keyboard Navigation
+// Keyboard Navigation - Nintendo Switch Style
 document.addEventListener('keydown', (e) => {
   if (!document.getElementById('mainSite').classList.contains('active')) return;
   if (document.getElementById('gamePlayer').classList.contains('active')) return;
@@ -1342,8 +1377,12 @@ function updateFocus() {
 
 function scrollToFocused() {
   const focusedCard = document.querySelector('.game-card.focused');
-  if (focusedCard) {
-    focusedCard.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+  const scrollArea = document.getElementById('gamesScrollArea');
+  if (focusedCard && scrollArea) {
+    const cardRect = focusedCard.getBoundingClientRect();
+    const scrollRect = scrollArea.getBoundingClientRect();
+    const scrollLeft = focusedCard.offsetLeft - scrollArea.offsetLeft - (scrollRect.width / 2) + (cardRect.width / 2);
+    scrollArea.scrollTo({ left: scrollLeft, behavior: 'smooth' });
   }
 }
 
