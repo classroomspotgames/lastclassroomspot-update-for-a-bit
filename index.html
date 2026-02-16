@@ -825,25 +825,6 @@
     font-size: 16px;
   }
 
-  /* Keyboard hint */
-  .keyboard-hint {
-    position: fixed;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #666;
-    font-size: 13px;
-    background: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s;
-    z-index: 50;
-  }
-  .keyboard-hint.show { opacity: 1; }
-
   /* Overlay */
   .overlay {
     position: fixed;
@@ -961,9 +942,6 @@
 <div class="visitor-counter" id="visitorCounter">
   👥 Visitors: <span id="visitorCount">1257</span>
 </div>
-
-<!-- Keyboard Navigation Hint -->
-<div class="keyboard-hint" id="keyboardHint">Use A / D or ← / → to navigate</div>
 
 <!-- My List Section -->
 <div class="my-list-section" id="myListSection">
@@ -1390,65 +1368,6 @@ function closeGame() {
   player.classList.remove('active');
   frame.src = '';
   frame.srcdoc = '';
-}
-
-// Keyboard Navigation - Nintendo Switch Style
-document.addEventListener('keydown', (e) => {
-  if (!document.getElementById('mainSite').classList.contains('active')) return;
-  if (document.getElementById('gamePlayer').classList.contains('active')) return;
-  if (document.getElementById('myListSection').classList.contains('active')) return;
-  
-  const cards = document.querySelectorAll('.game-card');
-  const totalCards = cards.length;
-  
-  if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
-    e.preventDefault();
-    if (focusedIndex > 0) {
-      focusedIndex--;
-      updateFocus();
-      scrollToFocused();
-    }
-    showKeyboardHint();
-  } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
-    e.preventDefault();
-    if (focusedIndex < totalCards - 1) {
-      focusedIndex++;
-      updateFocus();
-      scrollToFocused();
-    }
-    showKeyboardHint();
-  } else if (e.key === 'Enter') {
-    e.preventDefault();
-    if (filteredGames[focusedIndex]) {
-      openGame(filteredGames[focusedIndex]);
-    }
-  }
-});
-
-function updateFocus() {
-  const cards = document.querySelectorAll('.game-card');
-  cards.forEach((card, idx) => {
-    card.classList.toggle('focused', idx === focusedIndex);
-  });
-}
-
-function scrollToFocused() {
-  const focusedCard = document.querySelector('.game-card.focused');
-  const scrollArea = document.getElementById('gamesScrollArea');
-  if (focusedCard && scrollArea) {
-    const cardRect = focusedCard.getBoundingClientRect();
-    const scrollRect = scrollArea.getBoundingClientRect();
-    const scrollLeft = focusedCard.offsetLeft - scrollArea.offsetLeft - (scrollRect.width / 2) + (cardRect.width / 2);
-    scrollArea.scrollTo({ left: scrollLeft, behavior: 'smooth' });
-  }
-}
-
-function showKeyboardHint() {
-  const hint = document.getElementById('keyboardHint');
-  hint.classList.add('show');
-  setTimeout(() => {
-    hint.classList.remove('show');
-  }, 2000);
 }
 
 // Window Functions
