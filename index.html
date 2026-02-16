@@ -559,6 +559,80 @@
     background: #000;
   }
 
+  /* Fullscreen button */
+  .fullscreen-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: auto;
+  }
+  .fullscreen-btn:hover {
+    background: #218838;
+    transform: translateY(-1px);
+  }
+  .fullscreen-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  /* Fullscreen exit overlay */
+  .fullscreen-exit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 10;
+  }
+  .game-player.fullscreen .fullscreen-exit-overlay {
+    pointer-events: all;
+  }
+  .game-player.fullscreen .fullscreen-exit-overlay:hover {
+    opacity: 1;
+  }
+  .fullscreen-exit-btn {
+    background: #e60012;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.2s;
+  }
+  .fullscreen-exit-btn:hover {
+    background: #c00010;
+    transform: scale(1.1);
+  }
+
+  /* Hide header in fullscreen */
+  .game-player.fullscreen .game-player-header {
+    display: none;
+  }
+
   /* My List Section */
   .my-list-section {
     position: fixed;
@@ -934,8 +1008,17 @@
       Home
     </button>
     <span class="game-player-title" id="gamePlayerTitle">Game</span>
+    <button class="fullscreen-btn" onclick="toggleFullscreen()">
+      <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+      Fullscreen
+    </button>
   </div>
   <iframe class="game-frame" id="gameFrame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-pointer-lock"></iframe>
+  
+  <!-- Fullscreen Exit Overlay -->
+  <div class="fullscreen-exit-overlay" id="fullscreenExitOverlay">
+    <button class="fullscreen-exit-btn" onclick="exitFullscreen()">✕</button>
+  </div>
 </div>
 
 <!-- Visitor Counter -->
@@ -1369,6 +1452,56 @@ function closeGame() {
   frame.src = '';
   frame.srcdoc = '';
 }
+
+// Fullscreen functionality
+function toggleFullscreen() {
+  const player = document.getElementById('gamePlayer');
+  
+  if (!document.fullscreenElement) {
+    player.requestFullscreen().then(() => {
+      player.classList.add('fullscreen');
+    }).catch(err => {
+      console.error('Error attempting to enable fullscreen:', err);
+    });
+  } else {
+    exitFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen().then(() => {
+      document.getElementById('gamePlayer').classList.remove('fullscreen');
+    });
+  }
+}
+
+// Listen for escape key and fullscreen changes
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.fullscreenElement) {
+    exitFullscreen();
+  }
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    document.getElementById('gamePlayer').classList.remove('fullscreen');
+  }
+});
+
+// Show exit overlay when mouse is at top of screen in fullscreen
+document.getElementById('gamePlayer').addEventListener('mousemove', (e) => {
+  const player = document.getElementById('gamePlayer');
+  const overlay = document.getElementById('fullscreenExitOverlay');
+  
+  if (player.classList.contains('fullscreen')) {
+    if (e.clientY < 100) {
+      overlay.style.opacity = '1';
+    } else {
+      overlay.style.opacity = '0';
+    }
+  }
+});
 
 // Window Functions
 function openWindow(url, title) {
