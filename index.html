@@ -464,6 +464,44 @@
   }
   .game-card:hover .title, .game-card.focused .title { opacity: 1; }
 
+  /* Scroll Buttons */
+  .scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10;
+    transition: all 0.3s;
+  }
+  .scroll-btn:hover {
+    background: var(--primary);
+    transform: translateY(-50%) scale(1.1);
+  }
+  .scroll-btn:hover svg {
+    fill: white;
+  }
+  .scroll-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: #333;
+    transition: fill 0.3s;
+  }
+  .scroll-btn-left {
+    left: 20px;
+  }
+  .scroll-btn-right {
+    right: 20px;
+  }
+
   /* Fullscreen Game Player */
   .game-player {
     position: fixed;
@@ -891,6 +929,14 @@
 
   <!-- Games Container - Nintendo Switch Style Horizontal Scroll -->
   <div class="games-container">
+    <!-- Scroll Buttons -->
+    <button class="scroll-btn scroll-btn-left" onclick="scrollGamesLeft()">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
+    <button class="scroll-btn scroll-btn-right" onclick="scrollGamesRight()">
+      <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </button>
+    
     <div class="games-scroll-area" id="gamesScrollArea">
       <div class="games-row" id="gamesRow">
         <!-- Games loaded here -->
@@ -1295,6 +1341,17 @@ function renderGames() {
     }
     row.appendChild(card);
   });
+}
+
+// Scroll Button Functions
+function scrollGamesLeft() {
+  const scrollArea = document.getElementById('gamesScrollArea');
+  scrollArea.scrollBy({ left: -500, behavior: 'smooth' });
+}
+
+function scrollGamesRight() {
+  const scrollArea = document.getElementById('gamesScrollArea');
+  scrollArea.scrollBy({ left: 500, behavior: 'smooth' });
 }
 
 // Fullscreen Game Player - Fixed to properly load games
