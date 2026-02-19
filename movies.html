@@ -7,8 +7,8 @@
   <style>
     /* --- CORE VARIABLES & RESET --- */
     :root {
-      --primary-orange: #FF6B00;
-      --dark-orange: #CC5500;
+      --primary-red: #E50914;
+      --dark-red: #B20710;
       --netflix-dark: #141414;
       --netflix-black: #000000;
       --netflix-gray: #808080;
@@ -27,11 +27,11 @@
       color: var(--netflix-light);
       min-height: 100vh;
       overflow-x: hidden;
-      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23FF6B00" stroke="%23FF6B00" stroke-width="1"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>') 12 12, auto;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23E50914" stroke="%23E50914" stroke-width="1"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>') 12 12, auto;
     }
 
     a, button, .card, select, input, .scroll-btn {
-      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23FF6B00" stroke="%23FF6B00" stroke-width="1"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>') 12 12, pointer !important;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23E50914" stroke="%23E50914" stroke-width="1"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>') 12 12, pointer !important;
     }
 
     /* --- HEADER / NAV --- */
@@ -55,7 +55,7 @@
     }
 
     .logo {
-      color: var(--primary-orange);
+      color: var(--primary-red);
       font-size: 28px;
       font-weight: bold;
       text-transform: uppercase;
@@ -76,7 +76,7 @@
     }
 
     .nav-links a:hover {
-      color: var(--primary-orange);
+      color: var(--primary-red);
     }
 
     /* --- STREAMING SELECTOR --- */
@@ -93,27 +93,28 @@
 
     .stream-btn {
       padding: 10px 20px;
-      background: rgba(255, 107, 0, 0.2);
-      border: 2px solid var(--primary-orange);
-      color: var(--primary-orange);
+      background: rgba(229, 9, 20, 0.2);
+      border: 2px solid var(--primary-red);
+      color: var(--primary-red);
       border-radius: 4px;
       font-size: 14px;
       font-weight: 600;
       text-decoration: none;
       transition: all 0.3s;
       backdrop-filter: blur(10px);
+      cursor: pointer;
     }
 
     .stream-btn:hover {
-      background: var(--primary-orange);
-      color: #000;
+      background: var(--primary-red);
+      color: #fff;
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+      box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
     }
 
     .stream-btn.active {
-      background: var(--primary-orange);
-      color: #000;
+      background: var(--primary-red);
+      color: #fff;
     }
 
     /* --- SEARCH BAR --- */
@@ -144,7 +145,7 @@
     #searchInput.active {
       width: 260px;
       padding: 8px 35px 8px 10px;
-      border-bottom: 1px solid var(--primary-orange);
+      border-bottom: 1px solid var(--primary-red);
       background: rgba(0,0,0,0.75);
     }
 
@@ -224,12 +225,12 @@
     }
 
     .hero-btn.play {
-      background: var(--primary-orange);
-      color: #000;
+      background: var(--primary-red);
+      color: #fff;
     }
 
     .hero-btn.play:hover {
-      background: var(--dark-orange);
+      background: var(--dark-red);
       transform: scale(1.05);
     }
 
@@ -313,7 +314,7 @@
 
     .scroll-btn:hover {
       background: rgba(20, 20, 20, 0.9);
-      color: var(--primary-orange);
+      color: var(--primary-red);
     }
 
     .scroll-btn.left {
@@ -390,7 +391,7 @@
 
     .play-button:hover {
       transform: scale(1.1);
-      background: var(--primary-orange);
+      background: var(--primary-red);
     }
 
     .play-button::after {
@@ -461,9 +462,9 @@
     }
 
     .shard {
-      background: rgba(255, 107, 0, 0.3);
+      background: rgba(229, 9, 20, 0.3);
       backdrop-filter: blur(2px);
-      border: 1px solid rgba(255, 107, 0, 0.5);
+      border: 1px solid rgba(229, 9, 20, 0.5);
       position: absolute;
       transition: transform 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.6s;
     }
@@ -496,7 +497,7 @@
       position: relative;
       transform: scale(0.9);
       transition: transform 0.3s;
-      border: 1px solid var(--primary-orange);
+      border: 1px solid var(--primary-red);
     }
 
     #modal.active #modalContent {
@@ -518,27 +519,27 @@
       align-items: center;
       justify-content: center;
       z-index: 10;
-      border: 1px solid var(--primary-orange);
+      border: 1px solid var(--primary-red);
     }
 
     #closeModal:hover {
-      background: var(--primary-orange);
-      color: #000;
+      background: var(--primary-red);
+      color: #fff;
     }
 
     #modalTitle {
       padding: 20px;
       font-size: 24px;
       font-weight: 600;
-      color: var(--primary-orange);
+      color: var(--primary-red);
     }
 
     #modalRating {
       display: inline-block;
       margin: 0 20px;
       padding: 4px 8px;
-      border: 1px solid var(--primary-orange);
-      color: var(--primary-orange);
+      border: 1px solid var(--primary-red);
+      color: var(--primary-red);
       font-size: 12px;
       border-radius: 3px;
     }
@@ -553,7 +554,7 @@
     .modal-controls select {
       background: #333;
       color: #fff;
-      border: 1px solid var(--primary-orange);
+      border: 1px solid var(--primary-red);
       padding: 10px 15px;
       border-radius: 4px;
       font-size: 14px;
@@ -589,11 +590,11 @@
       border-radius: 8px;
       max-width: 500px;
       text-align: center;
-      border: 1px solid var(--primary-orange);
+      border: 1px solid var(--primary-red);
     }
 
     #disclaimerBox h1 {
-      color: var(--primary-orange);
+      color: var(--primary-red);
       font-size: 36px;
       margin-bottom: 20px;
     }
@@ -607,8 +608,8 @@
 
     .agree-btn {
       padding: 15px 40px;
-      background: var(--primary-orange);
-      color: #000;
+      background: var(--primary-red);
+      color: #fff;
       border: none;
       border-radius: 4px;
       font-size: 16px;
@@ -624,7 +625,7 @@
     }
 
     .agree-btn.enabled:hover {
-      background: var(--dark-orange);
+      background: var(--dark-red);
       transform: scale(1.05);
     }
 
@@ -635,13 +636,13 @@
       align-items: center;
       gap: 10px;
       padding: 40px;
-      color: var(--primary-orange);
+      color: var(--primary-red);
     }
 
     .dots span {
       width: 10px;
       height: 10px;
-      background: var(--primary-orange);
+      background: var(--primary-red);
       border-radius: 50%;
       display: inline-block;
       animation: pulse 1.4s infinite ease-in-out both;
@@ -695,6 +696,71 @@
         align-items: center;
       }
     }
+
+    /* --- PREVIEW MODAL --- */
+    #previewModal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2500;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    #previewModal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    #previewContent {
+      width: 100%;
+      max-width: 1200px;
+      height: 90vh;
+      background: #181818;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+      border: 1px solid var(--primary-red);
+    }
+
+    #previewModal.active #previewContent {
+      transform: scale(1);
+    }
+
+    #closePreview {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 36px;
+      height: 36px;
+      background: #181818;
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border: 1px solid var(--primary-red);
+    }
+
+    #closePreview:hover {
+      background: var(--primary-red);
+      color: #fff;
+    }
+
+    #previewFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -727,9 +793,9 @@
 
   <!-- Streaming Selector Buttons -->
   <div class="streaming-selector">
-    <a href="streaming.html" class="stream-btn active" onclick="setActiveStream(this)">CLASSROOMSPOT TV</a>
-    <a href="https://wmath.vercel.app/streaming.html" target="_blank" class="stream-btn" onclick="setActiveStream(this)">Some Stuff Streaming</a>
-    <a href="https://sites.google.com/view/thesolarsystem67/why-did-pluto-disappear-in-2009?read_current=1" target="_blank" class="stream-btn" onclick="setActiveStream(this)">Jupiter Streaming</a>
+    <button class="stream-btn active" onclick="setActiveStream(this); showHome();">CLASSROOMSPOT TV</button>
+    <button class="stream-btn" onclick="setActiveStream(this); openPreview('https://wmath.vercel.app/streaming.html')">Some Stuff Streaming</button>
+    <button class="stream-btn" onclick="setActiveStream(this); openPreview('https://sites.google.com/view/thesolarsystem67/why-did-pluto-disappear-in-2009?read_current=1')">Jupiter Streaming</button>
   </div>
 
   <!-- Featured Hero (South Park) -->
@@ -793,7 +859,7 @@
     <div class="dots"><span></span><span></span><span></span></div>
   </div>
 
-  <!-- Modal -->
+  <!-- Video Modal -->
   <div id="modal">
     <div id="modalContent">
       <button id="closeModal" onclick="closeModal()">✕</button>
@@ -809,6 +875,14 @@
           <select id="sourceSelect"></select>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Preview Modal for External Sites -->
+  <div id="previewModal">
+    <div id="previewContent">
+      <button id="closePreview" onclick="closePreview()">✕</button>
+      <iframe id="previewFrame" allowfullscreen></iframe>
     </div>
   </div>
 
@@ -828,6 +902,25 @@
         btn.classList.remove('active');
       });
       element.classList.add('active');
+    }
+
+    // --- PREVIEW MODAL ---
+    function openPreview(url) {
+      const previewModal = document.getElementById('previewModal');
+      const previewFrame = document.getElementById('previewFrame');
+      previewFrame.src = url;
+      previewModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePreview() {
+      const previewModal = document.getElementById('previewModal');
+      const previewFrame = document.getElementById('previewFrame');
+      previewModal.classList.remove('active');
+      setTimeout(() => {
+        previewFrame.src = '';
+      }, 300);
+      document.body.style.overflow = '';
     }
 
     // --- DISCLAIMER ---
