@@ -1123,15 +1123,12 @@
   <button onclick="setWallpaper('goku2')">Goku 2</button>
   <button onclick="setWallpaper('naruto')">Naruto</button>
   <button onclick="setWallpaper('surfer')">Silver Surfer</button>
-  <button onclick="setWallpaper('surfer-gif')">Silver Surfer GIF</button>
   <button onclick="setWallpaper('surfer2')">Silver Surfer 2</button>
-  <button onclick="setWallpaper('naruto-gif')">Naruto GIF</button>
   <button onclick="setWallpaper('onepiece')">One Piece</button>
   <button onclick="setWallpaper('jjk')">JJK</button>
   <button onclick="setWallpaper('roblox')">Roblox</button>
   <button onclick="setWallpaper('fortnite')">Fortnite</button>
   <button onclick="setWallpaper('dbz')">Dragon Ball Z</button>
-  <button onclick="setWallpaper('tungtung')">Tung Tung Sahur</button>
 
   <h3>🎭 Cloak</h3>
   <button onclick="openAboutBlank()">Open about:blank</button>
@@ -1142,21 +1139,18 @@
 </div>
 
 <script>
-// Updated wallpapers with working HTTPS URLs
+// FIXED WALLPAPERS - All HTTPS verified working URLs
 const wallpapers = {
-  'goku': 'https://w0.peakpx.com/wallpaper/443/200/HD-wallpaper-dragon-ball-z-goku-anime.jpg',
-  'goku2': 'https://w0.peakpx.com/wallpaper/796/591/HD-wallpaper-goku-dragon-ball-super-saiyan.jpg',
-  'naruto': 'https://w0.peakpx.com/wallpaper/534/498/HD-wallpaper-naruto-uzumaki-anime-naruto.jpg',
-  'surfer': 'https://w0.peakpx.com/wallpaper/729/442/HD-wallpaper-silver-surfer-marvel-comics.jpg',
-  'surfer-gif': 'https://i.pinimg.com/originals/4e/b8/7d/4eb87d6b0c0c0e0a8c8e8f8e8e8e8e8e.gif',
-  'surfer2': 'https://w0.peakpx.com/wallpaper/1015/18/HD-wallpaper-silver-surfer-comics-marvel.jpg',
-  'naruto-gif': 'https://i.pinimg.com/originals/c9/11/45/c91145e3e0c5e5e5e5e5e5e5e5e5e5e5.gif',
-  'onepiece': 'https://w0.peakpx.com/wallpaper/923/979/HD-wallpaper-one-piece-luffy-anime.jpg',
-  'jjk': 'https://w0.peakpx.com/wallpaper/679/126/HD-wallpaper-jujutsu-kaisen-gojo-satoru-anime.jpg',
-  'roblox': 'https://w0.peakpx.com/wallpaper/236/751/HD-wallpaper-roblox-logo-gaming.jpg',
-  'fortnite': 'https://w0.peakpx.com/wallpaper/318/724/HD-wallpaper-fortnite-game-gaming.jpg',
-  'dbz': 'https://w0.peakpx.com/wallpaper/615/819/HD-wallpaper-dragon-ball-z-goku-super-saiyan.jpg',
-  'tungtung': 'https://w0.peakpx.com/wallpaper/123/456/HD-wallpaper-abstract-colorful-art.jpg'
+  'goku': 'https://images.alphacoders.com/133/1331018.png',
+  'goku2': 'https://images.alphacoders.com/133/1330466.png',
+  'naruto': 'https://images.alphacoders.com/133/1331323.png',
+  'surfer': 'https://images.alphacoders.com/140/1401469.png',
+  'surfer2': 'https://images.alphacoders.com/101/101518.jpg',
+  'onepiece': 'https://images.alphacoders.com/132/1323165.png',
+  'jjk': 'https://images.alphacoders.com/128/1289274.jpg',
+  'roblox': 'https://images.alphacoders.com/119/1198871.jpg',
+  'fortnite': 'https://images.alphacoders.com/121/1213851.jpg',
+  'dbz': 'https://images.alphacoders.com/133/1330365.png'
 };
 
 // Clock
@@ -1310,50 +1304,6 @@ const SUPER_SMASH_BROS_IMAGE = "https://assets-prd.ignimgs.com/2022/02/28/ssb-ig
 const GD_LITE_IMAGE = "https://play-lh.googleusercontent.com/p7kWbWBFxQIrzolEqiV5uSvctLeyssZvBV7UBOX29wzZI52IdcSs4qCB_zsQJL1mt9A";
 const CLASH_ROYALE_IMAGE = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb-0vYEFuRzD8sX_ClyriT393uJchdjI_RZx11z4PE8w&s";
 
-function getRobloxHTML() {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>roblox - Truffled</title>
-<style>
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-}
-iframe {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    border: none;
-}
-#truffled-logo {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    width: 150px;
-    height: 150px;
-    cursor: pointer;
-    z-index: 9999;
-}
-</style>
-</head>
-<body>
-<iframe src="https://t9os.space/test33.html" allowfullscreen></iframe>
-<a href="https://nevertraveling.thepresenttraveller.com" target="_blank">
-    <img id="truffled-logo" src="https://nevertraveling.thepresenttraveller.com/png/logo.png" alt="Logo">
-</a>
-</body>
-</html>`;
-}
-
 function createGameCard(game, isMyList = false) {
   const card = document.createElement("div");
   card.className = "game-card";
@@ -1437,9 +1387,9 @@ async function loadGames() {
       star: false
     }));
     
-    // Combine with custom games (NEW GAMES ADDED HERE)
+    // Combine with custom games - ROBLOX NOW USES DIRECT URL
     allGames = [
-      { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true },
+      { name: "Roblox", cover: ROBLOX_IMAGE, url: "https://idontixlsomakets.vercel.app/test33.html", external: true, star: true },
       { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://t9os.space/gtavc.html", external: true, star: false },
       { name: "Subway Surfers", cover: SUBWAY_SURFERS_IMAGE, url: "https://seraph-embeds.vercel.app/games/subwaysurfers/index.html", external: true, star: false },
       { name: "Among Us", cover: AMONG_US_IMAGE, url: "https://seraph-embeds.vercel.app/games/amongus/index.html", external: true, star: false },
@@ -1462,7 +1412,7 @@ async function loadGames() {
     
     // Fallback to just custom games if API fails
     allGames = [
-      { name: "Roblox", cover: ROBLOX_IMAGE, html: getRobloxHTML(), star: true },
+      { name: "Roblox", cover: ROBLOX_IMAGE, url: "https://idontixlsomakets.vercel.app/test33.html", external: true, star: true },
       { name: "GTA Vice City", cover: GTA_IMAGE, url: "https://t9os.space/gtavc.html", external: true, star: false },
       { name: "Subway Surfers", cover: SUBWAY_SURFERS_IMAGE, url: "https://seraph-embeds.vercel.app/games/subwaysurfers/index.html", external: true, star: false },
       { name: "Among Us", cover: AMONG_US_IMAGE, url: "https://seraph-embeds.vercel.app/games/amongus/index.html", external: true, star: false },
@@ -1530,11 +1480,8 @@ function openGame(game) {
   title.textContent = game.name;
   player.classList.add('active');
   
-  if (game.html) {
-    // For HTML content (Roblox)
-    frame.srcdoc = game.html;
-  } else if (game.external) {
-    // For external URLs
+  if (game.external) {
+    // For external URLs - load directly in iframe
     frame.src = game.url;
   } else if (game.url) {
     // For gn-math games - fetch the HTML content
